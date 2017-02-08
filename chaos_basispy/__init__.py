@@ -6,7 +6,6 @@ Date : 2/7/2017
 
 """
 
-
+from _tools import *
 from _basis_adaptation import *
 from _AS_adaptation import *
-from _tools import *

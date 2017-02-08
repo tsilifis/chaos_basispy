@@ -7,7 +7,7 @@ Date: 2/7/2017
 """
 
 
-__all__ = ['dirac1D', 'diracND', 'inverse_transform_sampling']
+__all__ = ['dirac1D', 'diracND', 'grad_inner_prod_Legendre', 'gradgrad_inner_prod_Legendre', 'inverse_transform_sampling']
 
 
 import numpy as np
@@ -16,18 +16,18 @@ import orthpol
 from scipy import interpolate
 
 def dirac1D(a,b):
-	"""
-	Univariate Dirac function.
-	"""
+    """
+    Univariate Dirac function.
+    """
     val = 0 
     if a == b:
         val = 1
     return val
 
 def diracND(a,b):
-	"""
-	Multivariate Dirac function.
-	"""
+    """
+    Multivariate Dirac function.
+    """
     assert len(a) == len(b)
     n = len(a)
     val = 1
@@ -36,13 +36,13 @@ def diracND(a,b):
     return val
 
 def grad_inner_prod_Legendre(a,b):
-	"""
-	Computes the inner product (expectation) E[psi'_a(xi) psi_b(xi)],
-	where psi'_a(xi) the derivative of a Legendre polynomial of order a
-	and psi_b(xi) a Legendre polynomial of order b. Both polynomials as assumed
-	normalized and xi follows Uniform(-1,1).
-	"""
-	a = int(a)
+    """
+    Computes the inner product (expectation) E[psi'_a(xi) psi_b(xi)],
+    where psi'_a(xi) the derivative of a Legendre polynomial of order a
+    and psi_b(xi) a Legendre polynomial of order b. Both polynomials as assumed
+    normalized and xi follows Uniform(-1,1).
+    """
+    a = int(a)
     b = int(b)
     val = 0
     if a == 1:
@@ -57,13 +57,13 @@ def grad_inner_prod_Legendre(a,b):
 
 
 def gradgrad_inner_prod_Legendre(a,b):
-	"""
-	Computes the inner product (expectation) E[psi'_a(xi) psi'_b(xi)],
-	where psi'_a(xi) the derivative of a Legendre polynomial of order a
-	and psi'_b(xi) the derivative of a Legendre polynomial of order b. Both 
-	polynomials as assumed normalized and xi follows Uniform(-1,1).
-	"""
-	a = int(a)
+    """
+    Computes the inner product (expectation) E[psi'_a(xi) psi'_b(xi)],
+    where psi'_a(xi) the derivative of a Legendre polynomial of order a
+    and psi'_b(xi) the derivative of a Legendre polynomial of order b. Both 
+    polynomials as assumed normalized and xi follows Uniform(-1,1).
+    """
+    a = int(a)
     b = int(b)
     val = 0.
     if a == 1 and b > 0:
