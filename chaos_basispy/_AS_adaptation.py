@@ -6,7 +6,7 @@ Date: 2/7/2017
 
 """
 
-__all__ = ['AS_adaptation']
+__all__ = ['ActiveSubspaceAdaptation']
 
 
 import numpy as np
@@ -25,4 +25,3 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
 		"""
 		super(ActiveSubspaceAdaptation, self).__init__(num_dim, name = name)
 
-	

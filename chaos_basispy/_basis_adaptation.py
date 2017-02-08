@@ -17,11 +17,13 @@ class BasisAdaptation(object):
 	A class that represents a Polynomial Chaos expansion 
 	expressed in terms of a rotated basis. 
 
-
 	"""
 
 	# A name for the expansion
 	__name__ = None
+
+	# The type of polynomials in the expansion
+	_poly_type = None
 
 	# The initial input dimension.
 	_inp_dim = None
@@ -78,7 +80,7 @@ class BasisAdaptation(object):
 		self._num_chaos_coeffs = value
 
 
-	def __init__(self, num_dim, num_chaos_coeffs = None, chaos_order = None, chaos_coeffs = None, name = 'Adapted PC expansion'):
+	def __init__(self, num_dim, num_chaos_coeffs = None, chaos_order = None, chaos_coeffs = None, type = 'Hermite', name = 'Adapted PC expansion'):
 		"""
 		Initialize the object.
 		"""
@@ -90,6 +92,10 @@ class BasisAdaptation(object):
 			self._chaos_order = chaos_order
 		if chaos_coeffs is not None:
 			self._chaos_coeffs = chaos_coeffs
+		if type == 'Hermite' or 'Legendre':
+			self._poly_type = type
+		else:
+			raise RuntimeError('The polynomials should be either Hermite of Legendre!')
 		self.__name__ = str(name)
 
 
@@ -98,6 +104,7 @@ class BasisAdaptation(object):
 		Return a string representation of the object.
 		"""
 		s = 'Name: ' + self.__name__ + '\n'
+		s = 'Polynomials type: ' + self._poly_type + '\n'
 		s += 'Initial input dimension: ' + self._inp_dim + '\n'
 		s += 'Order of expansion: ' + self._chaos_order + '\n'
 		return s
