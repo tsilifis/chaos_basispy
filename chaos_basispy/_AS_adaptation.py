@@ -6,7 +6,7 @@ Date: 2/7/2017
 
 """
 
-__all__ = ['ActiveSubspaceAdaptation']
+__all__ = ['ActiveSubspaceAdaptation', 'GaussianAdaptation', 'QuadraticAdaptation']
 
 
 import numpy as np
@@ -31,16 +31,16 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
         """
         super(ActiveSubspaceAdaptation, self).__init__(num_dim, name = name)
 
-    def _stiffness_K(self, dim, deg, i, j):
+    def _stiffness_K(self, deg, i, j):
         """
-        Computes
+        Computes the stiffness matrix K^{ij} with entries 
+        K_{ab}^{ij} = E[\frac{d psi_a (xi)}{d xi_i} \frac{d psi_b(xi)}{d xi_j}]
         """
-        assert isinstance(dim, int)
         assert isinstance(deg, int)
         assert isinstance(i, int)
         assert isinstance(j, int)
-    	assert i < dim and j < dim
-        rvs = [st.norm()] * dim
+    	assert i < self._inp_dim and j < self._inp_dim
+        rvs = [st.norm()] * self._inp_dim
         pol = orthpol.ProductBasis(rvs, degree = deg)
         Q = len(pol._terms)
         stiff = np.zeros((Q,Q))
@@ -79,3 +79,18 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
                         beta[j] = beta[j] - 1
                         stiff[k,l] = C * diracND(alpha, beta)
         return stiff
+
+
+class GaussianAdaptation(ActiveSubspaceAdaptation):
+    """
+    docstring for GaussianAdaptation"ActiveSubspaceAdaptation 
+    """
+    def __init__(self, num_dim, name = 'Gaussian Basis Adaptation'):
+        super(GaussianAdaptation, self).__init__(num_dim, name = name)
+
+class QuadraticAdaptation(ActiveSubspaceAdaptation):
+    """
+    """
+    def __init__(self, num_dim, name = 'Quadratic Basis Adaptation'):
+        super(QuadraticAdaptation, self).__init__(num_dim, name = name)
+        

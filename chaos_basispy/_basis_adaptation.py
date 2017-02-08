@@ -79,6 +79,23 @@ class BasisAdaptation(object):
 		"""
 		self._num_chaos_coeffs = value
 
+	@property
+	def poly_type(self):
+		"""
+		:getter: The type of polynomials in the expansion 
+		(currently supports only Hermite and Legendre).
+		"""
+		return self._poly_type
+
+	@poly_type.setter
+	def poly_type(self, value):
+		"""
+		Set the type of polynomials to be either Hermite of Legendre.
+		"""
+		if value == 'Hermite' or 'Legendre':
+			self._poly_type = value
+		else:
+			raise RuntimeError('The polynomials should be either Hermite of Legendre!')
 
 	def __init__(self, num_dim, num_chaos_coeffs = None, chaos_order = None, chaos_coeffs = None, type = 'Hermite', name = 'Adapted PC expansion'):
 		"""
@@ -105,8 +122,8 @@ class BasisAdaptation(object):
 		"""
 		s = 'Name: ' + self.__name__ + '\n'
 		s = 'Polynomials type: ' + self._poly_type + '\n'
-		s += 'Initial input dimension: ' + self._inp_dim + '\n'
-		s += 'Order of expansion: ' + self._chaos_order + '\n'
+		s += 'Initial input dimension: ' + str(self._inp_dim) + '\n'
+		s += 'Order of expansion: ' + str(self._chaos_order) + '\n'
 		return s
 
 
