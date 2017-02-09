@@ -13,3 +13,10 @@ a = np.random.normal()
 b = np.random.normal()
 c = np.random.normal()
 print a,b,c
+
+xi = st.uniform.rvs(loc= -1., scale = 2., size = (10,1000))
+#xi = st.norm.rvs(size = (10, 10000))
+def f(xi, a, b, c, W):
+    assert xi.shape[0] == 10
+    assert W.shape[0] == 10
+    return a + b * np.dot(W.T, xi) + c * np.dot(xi.reshape(1,xi.shape[0]), np.dot(np.dot(W, W.T) , xi))
