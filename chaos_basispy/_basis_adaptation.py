@@ -97,7 +97,7 @@ class BasisAdaptation(object):
 		else:
 			raise RuntimeError('The polynomials should be either Hermite of Legendre!')
 
-	def __init__(self, num_dim, num_chaos_coeffs = None, chaos_order = None, chaos_coeffs = None, type = 'Hermite', name = 'Adapted PC expansion'):
+	def __init__(self, num_dim, num_chaos_coeffs = None, chaos_order = None, chaos_coeffs = None, pol_type = 'Hermite', name = 'Adapted PC expansion'):
 		"""
 		Initialize the object.
 		"""
@@ -109,8 +109,8 @@ class BasisAdaptation(object):
 			self._chaos_order = chaos_order
 		if chaos_coeffs is not None:
 			self._chaos_coeffs = chaos_coeffs
-		if type == 'Hermite' or 'Legendre':
-			self._poly_type = type
+		if pol_type == 'Hermite' or 'Legendre':
+			self._poly_type = pol_type
 		else:
 			raise RuntimeError('The polynomials should be either Hermite of Legendre!')
 		self.__name__ = str(name)
@@ -121,7 +121,7 @@ class BasisAdaptation(object):
 		Return a string representation of the object.
 		"""
 		s = 'Name: ' + self.__name__ + '\n'
-		s = 'Polynomials type: ' + self._poly_type + '\n'
+		s += 'Type of polynomials: ' + self._poly_type + '\n'
 		s += 'Initial input dimension: ' + str(self._inp_dim) + '\n'
 		s += 'Order of expansion: ' + str(self._chaos_order) + '\n'
 		return s
