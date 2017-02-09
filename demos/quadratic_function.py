@@ -20,3 +20,8 @@ def f(xi, a, b, c, W):
     assert xi.shape[0] == 10
     assert W.shape[0] == 10
     return a + b * np.dot(W.T, xi) + c * np.dot(xi.reshape(1,xi.shape[0]), np.dot(np.dot(W, W.T) , xi))
+
+
+out = np.zeros(1000)
+for i in range(1000):
+    out[i] = f(xi[:,i], a, b, c, W)
