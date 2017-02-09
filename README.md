@@ -39,6 +39,15 @@ Module Capabilities
 To be written soon...
 
 
+Citation
+--------
+@Misc{chaos_basispy2017,
+  author =   {{Tsilifis, P.}},
+  title =    {{chaos_basispy}: A Polynomial Chaos basis adaptation framework in python},
+  howpublished = {\url{https://github.com/tsilifis/chaos_basispy}},
+  year = {since 2017}
+}
+
 References
 ----------
 
