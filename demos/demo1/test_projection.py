@@ -83,7 +83,6 @@ print '-'*40
 print str(l[-1]) + ' | ' +str((b**2 + 4 * c**2 / 3.))
 
 plt.plot(l[::-1], 'x')
-plt.show()
 
 A = v[:,::-1].T
 a = A[0,:]
