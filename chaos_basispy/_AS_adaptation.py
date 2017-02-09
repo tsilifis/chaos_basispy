@@ -97,7 +97,7 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
         assert Q == coeffs.shape[0]
         Grad_lo = np.zeros((self._inp_dim, self._inp_dim))
         for i in range(self._inp_dim):
-            for j in range(self._inp_dim):
+            for j in range(i+1):
                 stiff = self._stiffness_K(deg, i, j)
                 Grad_lo[i,j] = np.dot(np.dot(coeffs.reshape(1,Q), stiff), coeffs.reshape(Q,1))[0,0]
         return Grad_lo + Grad_lo.T - np.diag(np.diag(Grad_lo))
