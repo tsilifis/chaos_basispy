@@ -80,16 +80,41 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
                         stiff[k,l] = C * diracND(alpha, beta)
         return stiff
 
+    def _grad_covar(self, deg, coeffs):
+        """
+        Computes the covariance matric of the gradient vector 
+        of the QoI given a set of coefficient values "coeffs"
+        corresponding to the currently availble full dimensional
+        PCE of the QoI.
+        """
+        rvs = None
+        if self._poly_type == 'Hermite':
+            rvs = [st.norm()] * self._inp_dim
+        elif self._poly_type == 'Legendre':
+            rvs = [st.uniform()] * self._inp_dim
+        pol = orthpol.ProductBasis(rvs, degree = deg)
+        Q = len(pol._terms)
+        assert Q == coeffs.shape[0]
+        Grad_lo = np.zeros((self._inp_dim, self._inp_dim))
+        for i in range(self._inp_dim):
+            for j in range(self._inp_dim):
+                stiff = self._stiffness_K(deg, i, j)
+                Grad_lo[i,j] = np.dot(np.dot(coeffs.reshape(1,Q), stiff), coeffs.reshape(Q,1))[0,0]
+        return Grad_lo + Grad_lo.T - np.diag(np.diag(Grad_lo))
+
 
 class GaussianAdaptation(ActiveSubspaceAdaptation):
     """
-    docstring for GaussianAdaptation"ActiveSubspaceAdaptation 
+    A class the represents a Polynomial Chaos expansion with adapted basis using the 
+    Gaussian adaptation method. 
     """
     def __init__(self, num_dim, name = 'Gaussian Basis Adaptation'):
         super(GaussianAdaptation, self).__init__(num_dim, name = name)
 
 class QuadraticAdaptation(ActiveSubspaceAdaptation):
     """
+    A class the represents a Polynomial Chaos expansion with adapted basis using the 
+    Quadratic adaptation method. 
     """
     def __init__(self, num_dim, name = 'Quadratic Basis Adaptation'):
         super(QuadraticAdaptation, self).__init__(num_dim, name = name)
