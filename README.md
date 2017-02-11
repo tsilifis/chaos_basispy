@@ -36,6 +36,15 @@ Module Requirements
 
 Module Capabilities
 -------------------
+
+The `chaos_basispy` module focuses on computing the rotation using several techniques, namely:
+
+- Active subspace method
+
+- Gaussian adaptation
+
+- Quadratic adaptation 
+
 To be written soon...
 
 
