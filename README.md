@@ -27,12 +27,17 @@ Due to the above, this module considers only Hermite and Legendre Chaos expansio
 
 Module Requirements
 -------------------
+### Python :
 
 - Numpy
 
 - Scipy
 
 - Py-orthpol (available at https://github.com/PredictiveScienceLab/py-orthpol)
+
+### Other :
+
+- Dakota (only necessary for the generating sparse grids, available at https://dakota.sandia.gov/) 
 
 Module Capabilities
 -------------------
