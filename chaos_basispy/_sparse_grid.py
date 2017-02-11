@@ -32,7 +32,7 @@ class SparseGrid(object):
 	def variables(self):
 		return self._type
 
-	@type.setter
+	@variables.setter
 	def variables(self, value):
 		self._type = value
 
