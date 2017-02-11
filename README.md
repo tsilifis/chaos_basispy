@@ -37,7 +37,7 @@ Module Requirements
 Module Capabilities
 -------------------
 
-The key idea behind Basis Adaptation is to identify the proper rotation matrix such that the input random variables are mapped to a lower dimensional subspace. The `chaos_basispy` module focuses on computing the rotation using several techniques, namely:
+The `chaos_basispy` module focuses on computing the rotation using several techniques, namely:
 
 - Active subspace method
 
