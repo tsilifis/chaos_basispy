@@ -37,7 +37,7 @@ Module Requirements
 
 ### Other :
 
-- Dakota (only necessary for the generating sparse grids, available at https://dakota.sandia.gov/) 
+- Dakota (only necessary for generating sparse grids, available at https://dakota.sandia.gov/) 
 
 Module Capabilities
 -------------------
