@@ -6,5 +6,5 @@ setup(name='chaos_basispy',
 	url = 'https://github.com/tsilifis/chaos_basispy',
 	author = 'Panagiotis Tsilifis',
 	author_email = 'tsilifis@usc.edu',
-	keywords = ['polynomial chaos', 'hermite chaos' 'dimensionality reduction', 'surrogate', 'uncertainty quantification'],
+	keywords = ['polynomial chaos', 'hermite chaos', 'dimensionality reduction', 'surrogate', 'uncertainty quantification'],
 	packages = ['chaos_basispy'])
