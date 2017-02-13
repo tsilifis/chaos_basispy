@@ -9,6 +9,7 @@ Date: 2/10/2017
 __all__ = ['SparseGrid']
 
 from os import system
+import numpy as np
 
 class SparseGrid(object):
 	"""
@@ -38,7 +39,7 @@ class SparseGrid(object):
 
 	def __init__(self, level, variables, name = "Sparse Grid Generator"):
 
-		assert isinstance(leve, int)
+		assert isinstance(level, int)
 		self._level = level
 		if type == "N" or "Normal":
 			self._variables = variables
@@ -48,7 +49,7 @@ class SparseGrid(object):
 			raise RuntimeError('Currently only Normal and Uniform grids are supported !\n Type should be "Normal" ("N") or "Uniform" ("U").')
 		self.__name__ = str(name)
 
-	def generate_grid(dim):
+	def generate_grid(self, dim):
 		"""
 		Generates a sparse grid of dimension "dim" with default parameters. 
 		"""
@@ -70,12 +71,33 @@ class SparseGrid(object):
 		f.close()
 		system('dakota -i ' + str(f.name))
 
+		out = open('dakota_sparse_tabular.dat', 'rU')
+		N = -1
+		for line in f:
+			N = N + 1
+		weights = np.zeros(N)
+		grid = np.zeros((N, dim))
+		f.readline()
+
+		pos = []
+		for i in range(dim):
+			pos += [25+i*25]
+
+		for i in range(N):
+			line = f.readline()
+			print line[:6]
+			weights[i] = float(line[6:25])
+			grid[i,:] = np.array([float(line[j:j+15]) for j in pos])
+
+		return grid, weights
+			
+
 	def __str__(self):
 		"""
 		Return a string representation of the object.
 		"""
 		s = 'Name: ' + self.__name__ + '\n'
-		s += 'Level: ' + self._level + '\n'
+		s += 'Level: ' + str(self._level) + '\n'
 		s += 'Variables: ' + str(self._variables) + '\n'
 		return s
 
