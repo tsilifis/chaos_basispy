@@ -22,7 +22,7 @@ and the transformation is through an isometry (unitary matrix), the new variable
 "Gaussianity" and a new PCE can be constructed with respect to them. This makes the BA 
 framework particularly attractive on Hermite PCEs and in fact inapplicable (yet) to 
 generalized PCEs. An expeption is when the new variables is 1-dimensional which can be mapped
-to a uniform r.v through its own cdf and therefore the Legendre adapted PCE can be constructed.
+to a uniform r.v. through its own cdf and therefore the Legendre adapted PCE can be constructed.
 Due to the above, this module considers only Hermite and Legendre Chaos expansions.
 
 Module Requirements
