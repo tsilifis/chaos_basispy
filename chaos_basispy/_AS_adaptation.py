@@ -102,7 +102,7 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
                 Grad_lo[i,j] = np.dot(np.dot(coeffs.reshape(1,Q), stiff), coeffs.reshape(Q,1))[0,0]
         return Grad_lo + Grad_lo.T - np.diag(np.diag(Grad_lo))
 
-    def _comp_rotation(self, coeffs):
+    def rotation(self, coeffs):
         """
         Computes the rotation matrix.
         """
@@ -117,7 +117,7 @@ class GaussianAdaptation(ActiveSubspaceAdaptation):
     def __init__(self, num_dim, name = 'Gaussian Basis Adaptation'):
         super(GaussianAdaptation, self).__init__(num_dim, pol_type = 'H', name = name)
 
-    def _comp_rotation(self, coeffs):
+    def rotation(self, coeffs):
         assert coeffs.shape[0] > self._inp_dim
         coeffs = coeffs[:self._inp_dim + 1]
         C = self._grad_covar(1, coeffs)
@@ -133,7 +133,7 @@ class QuadraticAdaptation(ActiveSubspaceAdaptation):
     def __init__(self, num_dim, name = 'Quadratic Basis Adaptation'):
         super(QuadraticAdaptation, self).__init__(num_dim, pol_type = 'H', name = name)
 
-    def _comp_rotation(self, coeffs):
+    def rotation(self, coeffs):
         Q = self._inp_dim + 1 + self._inp_dim * (self._inp_dim + 1) / 2
         assert coeffs.shape[0] >= Q
         coeffs = coeffs[:Q]
