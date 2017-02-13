@@ -15,11 +15,18 @@ class SparseGrid(object):
 	"""
 
 	"""
+
+	# Name of the SparseGrid object.
 	__name__ = None
 
+	# The level of the quadrature rule.
 	_level = None 
 
+	# The type of variables.
 	_variables = None
+
+	# The parameters of the variables. 
+	_params = None
 
 	@property
 	def level(self):
@@ -37,14 +44,38 @@ class SparseGrid(object):
 	def variables(self, value):
 		self._type = value
 
-	def __init__(self, level, variables, name = "Sparse Grid Generator"):
+	@property
+	def params(self):
+		return self._params
+
+	@params.setter
+	def params(self, value):
+		assert value.shape[0] == 2
+		if self._variables == "N" or "Normal":
+			assert value[1] > 0
+			self._params = value
+		else:
+			self._params = value
+
+	def __init__(self, level, variables, params = None, name = "Sparse Grid Generator"):
 
 		assert isinstance(level, int)
 		self._level = level
-		if type == "N" or "Normal":
+		if variables == "N" or "Normal":
 			self._variables = variables
-		elif type == "U" or "Uniform":
-			se;f._variables = variables
+			if params is not None:
+				assert params.shape[0] == 2
+				assert params[1] > 0
+				self._params = params
+			else:
+				self._params = np.array([0., 1.])
+		elif variables == "U" or "Uniform":
+			self._variables = variables
+			if params is not None:
+				assert params.shape[0] == 2
+				self._params = params
+			else:
+				self._params = np.array([-1., 1.])
 		else:
 			raise RuntimeError('Currently only Normal and Uniform grids are supported !\n Type should be "Normal" ("N") or "Uniform" ("U").')
 		self.__name__ = str(name)
@@ -58,12 +89,12 @@ class SparseGrid(object):
 		f = open(name, 'w')
 		if self._variables == "N" or "Normal":
 			text = ['method\n', '	polynomial_chaos\n', '	sparse_grid_level=3\n', '	output verbose\n', 
-					'variables\n', '	normal_uncertain ='+str(dim)+'\n', '	means ='+str(dim)+'*0\n', '	std_deviations ='+str(dim)+'*1\n',
+					'variables\n', '	normal_uncertain ='+str(dim)+'\n', '	means ='+str(dim)+'*'+str(self._params[0])+'\n', '	std_deviations ='+str(dim)+'*'+str(self._params[1])+'\n',
 					'interface\n', '	direct\n', "	analysis_driver = 'rosenbrock'\n", 'responses\n', 
 					"	response_functions = 1\n", "	no_gradients\n", "	no_hessians\n"]
 		elif self._variables == "U" or "Uniform":
 			text = ['method\n', '	polynomial_chaos\n', '	sparse_grid_level=3\n', '	output verbose\n', 
-					'variables\n', '	uniform_uncertain ='+str(dim)+'\n', '	lower_bounds ='+str(dim)+'* -1.\n', '	upper_bounds ='+str(dim)+'*1\n',
+					'variables\n', '	uniform_uncertain ='+str(dim)+'\n', '	lower_bounds ='+str(dim)+'* '+str(self._params[0])+'\n', '	upper_bounds ='+str(dim)+'*'+str(self._params[1])+'\n',
 					'interface\n', '	direct\n', "	analysis_driver = 'rosenbrock'\n", 'responses\n', 
 					"	response_functions = 1\n", "	no_gradients\n", "	no_hessians\n"]
 
