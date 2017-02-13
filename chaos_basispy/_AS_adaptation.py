@@ -25,11 +25,11 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
 
     """
 
-    def __init__(self, num_dim, name = 'Active Subspace Basis Adaptation'):
+    def __init__(self, num_dim, pol_type = 'H', name = 'Active Subspace Basis Adaptation'):
         """
         Initialize the object
         """
-        super(ActiveSubspaceAdaptation, self).__init__(num_dim, name = name)
+        super(ActiveSubspaceAdaptation, self).__init__(num_dim, pol_type = pol_type, name = name)
 
     def _stiffness_K(self, deg, i, j):
         """
@@ -44,7 +44,7 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
         pol = orthpol.ProductBasis(rvs, degree = deg)
         Q = len(pol._terms)
         stiff = np.zeros((Q,Q))
-        if self._poly_type == 'Legendre':
+        if self._poly_type == 'Legendre' or 'L':
             for k in range(Q):
                 for l in range(Q):
                     alpha = pol._terms[k]
@@ -66,7 +66,7 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
                         E_i = grad_inner_prod_Legendre(a_i, b_i)
                         E_j = grad_inner_prod_Legendre(b_j, a_j)
                         stiff[k,l] = diracND(a_m, b_m) * E_i * E_j
-        elif self._poly_type == 'Hermite':
+        elif self._poly_type == 'Hermite' or 'H':
             for k in range(Q):
                 for l in range(Q):
                     alpha = pol._terms[k]
@@ -88,9 +88,9 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
         PCE of the QoI.
         """
         rvs = None
-        if self._poly_type == 'Hermite':
+        if self._poly_type == 'Hermite' or 'H':
             rvs = [st.norm()] * self._inp_dim
-        elif self._poly_type == 'Legendre':
+        elif self._poly_type == 'Legendre' or 'L':
             rvs = [st.uniform()] * self._inp_dim
         pol = orthpol.ProductBasis(rvs, degree = deg)
         Q = len(pol._terms)
@@ -102,20 +102,43 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
                 Grad_lo[i,j] = np.dot(np.dot(coeffs.reshape(1,Q), stiff), coeffs.reshape(Q,1))[0,0]
         return Grad_lo + Grad_lo.T - np.diag(np.diag(Grad_lo))
 
+    def _comp_rotation(self, coeffs):
+        """
+        Computes the rotation matrix.
+        """
+        raise NotImplementedError('Only my children compute the rotation matrix directly!')
+
 
 class GaussianAdaptation(ActiveSubspaceAdaptation):
     """
-    A class the represents a Polynomial Chaos expansion with adapted basis using the 
+    A class that represents a Polynomial Chaos expansion with adapted basis using the 
     Gaussian adaptation method. 
     """
     def __init__(self, num_dim, name = 'Gaussian Basis Adaptation'):
-        super(GaussianAdaptation, self).__init__(num_dim, name = name)
+        super(GaussianAdaptation, self).__init__(num_dim, pol_type = 'H', name = name)
+
+    def _comp_rotation(self, coeffs):
+        assert coeffs.shape[0] > self._inp_dim
+        coeffs = coeffs[:self._inp_dim + 1]
+        C = self._grad_covar(1, coeffs)
+        [l, v] = np.linalg.eigh(C)
+        return v[:,::-1].T
+
 
 class QuadraticAdaptation(ActiveSubspaceAdaptation):
     """
-    A class the represents a Polynomial Chaos expansion with adapted basis using the 
+    A class that represents a Polynomial Chaos expansion with adapted basis using the 
     Quadratic adaptation method. 
     """
     def __init__(self, num_dim, name = 'Quadratic Basis Adaptation'):
-        super(QuadraticAdaptation, self).__init__(num_dim, name = name)
+        super(QuadraticAdaptation, self).__init__(num_dim, pol_type = 'H', name = name)
+
+    def _comp_rotation(self, coeffs):
+        Q = self._inp_dim + 1 + self._inp_dim * (self._inp_dim + 1) / 2
+        assert coeffs.shape[0] >= Q
+        coeffs = coeffs[:Q]
+        coeffs[:self._inp_dim + 1] = 0
+        C = self._grad_covar(2, coeffs)
+        [l, v] = np.linalg.eigh(C)
+        return v[:,::-1].T
         

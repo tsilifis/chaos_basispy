@@ -92,7 +92,7 @@ class BasisAdaptation(object):
 		"""
 		Set the type of polynomials to be either Hermite of Legendre.
 		"""
-		if value == 'Hermite' or 'Legendre':
+		if value == 'Hermite' or "H" or 'Legendre' or "L":
 			self._poly_type = value
 		else:
 			raise RuntimeError('The polynomials should be either Hermite of Legendre!')
@@ -109,7 +109,7 @@ class BasisAdaptation(object):
 			self._chaos_order = chaos_order
 		if chaos_coeffs is not None:
 			self._chaos_coeffs = chaos_coeffs
-		if pol_type == 'Hermite' or 'Legendre':
+		if pol_type == 'Hermite' or 'Legendre' or 'H' or 'L':
 			self._poly_type = pol_type
 		else:
 			raise RuntimeError('The polynomials should be either Hermite of Legendre!')
