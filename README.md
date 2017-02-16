@@ -50,8 +50,12 @@ The `chaos_basispy` module focuses on computing the rotation using several techn
 
 - Quadratic adaptation 
 
-To be written soon...
+More detailed description to be written soon...
 
+Demos
+-----
+
+To quickly validate that the package is properly installed and bug-free, please the demos. Currently only demo1 is complete. For details on the demo please see section 3.1 in [4]. Demo2 and more are coming soon...
 
 Citation
 --------
