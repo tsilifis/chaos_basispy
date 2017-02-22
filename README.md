@@ -50,7 +50,9 @@ The `chaos_basispy` module focuses on computing the rotation using several techn
 
 - Quadratic adaptation 
 
-More detailed description to be written soon...
+At this stage, the module supports classes that compute the rotation matrix that can be applied to the random variables with the respect to which the PCE is built and therefore transform them to the new random input. 
+
+Further capabilities of computing the new coefficients of adapted PCE's by linking to application-specific forward models will be developed soon.
 
 Demos
 -----
