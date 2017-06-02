@@ -44,7 +44,7 @@ Module Capabilities
 
 The `chaos_basispy` module focuses on computing the rotation using several techniques, namely:
 
-- Active subspace method
+- Gradient based method (active subspace)
 
 - Gaussian adaptation
 
