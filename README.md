@@ -44,14 +44,20 @@ Module Capabilities
 
 The `chaos_basispy` module focuses on computing the rotation using several techniques, namely:
 
-- Active subspace method
+- Gradient based method (active subspace)
 
 - Gaussian adaptation
 
 - Quadratic adaptation 
 
-To be written soon...
+At this stage, the module supports classes that compute the rotation matrix that can be applied to the random variables with the respect to which the PCE is built and therefore transform them to the new random input. 
 
+Further capabilities of computing the new coefficients of adapted PCE's by linking to application-specific forward models will be developed soon.
+
+Demos
+-----
+
+To quickly validate that the package is properly installed and bug-free, please see the /demos directory. Currently only demo1 is complete. For details on the demo please see section 3.1 in [4]. Demo2 and more are coming soon...
 
 Citation
 --------
@@ -70,6 +76,6 @@ References
 
 [2] Tipireddy, R. and Ghanem, R., Basis adaptation in homogeneous chaos spaces. Journal of Computational Physics, 259, pp.304-317, 2014.
 
-[3] Tsilifis, P. and Ghanem, R., Reduced Wiener Chaos representation of random fields via basis adaptation and projection. To appear in Journal of Computational Physics (arXiv:1603.04803), 2016.
+[3] Tsilifis, P. and Ghanem, R., Reduced Wiener Chaos representation of random fields via basis adaptation and projection. Journal of Computational Physics, 341, pp. 102-120, 2016.
 
 [4] Tsilifis, P.A., Reduced-dimensionality Legendre Chaos expansions via basis adaptation on 1d active subspaces. arXiv preprint arXiv:1611.02754, 2016.
