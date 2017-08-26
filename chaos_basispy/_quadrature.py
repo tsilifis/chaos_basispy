@@ -68,12 +68,14 @@ class QuadratureRule(object):
 		if n == 1:
 			return 1.
 		else:
+			print n
 			H = np.zeros(n)
 			H[0] = 1.
 			H[1] = x
 			for i in range(2,n):
 				H[i] = x*H[i-1] - (i-1) * H[i-2]
 			H = H / [math.sqrt(math.factorial(i)) for i in range(H.shape[0])]
+			print H
 			return H
 
 
@@ -116,13 +118,11 @@ class QuadratureRule(object):
 		if odd:
 			n = 2 ** n - 1
 		d = np.sqrt(np.arange(n))[1:]
-		w = np.zeros(n)
 		H = np.diag(d, -1) + np.diag(d, 1)
 		[x, v] = np.linalg.eigh(H)
 		if odd:
 			x[(n-1)/2] = 0.
-		for i in range(n):
-			w[i] = 1 / np.sum(self.Hermite(x[i], n)**2)
+		w = v[0,:] ** 2
 		rule = {'x': x, 'w': w}
 		return rule
 
@@ -133,11 +133,9 @@ class QuadratureRule(object):
 		if odd:
 			n = 2 ** n - 1
 		d = np.sqrt([i**2/((2.*i+1.)*(2*i-1.)) for i in range(1,n)])
-		w = np.zeros(n)
 		H = np.diag(d, -1) + np.diag(d, 1)
 		[x, v] = np.linalg.eigh(H)
-		for i in range(n):
-			w[i] = 1 / np.sum(self.Legendre(x[i], n) ** 2)
+		w = v[0,:] ** 2
 		if (x.shape[0]-1) % 2 == 0:
 			x[(x.shape[0]-1) / 2] = 0.
 		rule = {'x': x, 'w': w}
@@ -151,11 +149,9 @@ class QuadratureRule(object):
 			n = 2 ** n - 1
 		d = [i for i in range(1,n)]
 		alpha = [2*i+1 for i in range(n)]
-		w = np.zeros(n)
 		H = np.diag(alpha) + np.diag(d, -1) + np.diag(d, 1)
 		[x, v] = np.linalg.eigh(H)
-		for i in range(n):
-			w[i] = 1 / np.sum(self.Laguerre(x[i], n) ** 2)
+		w = v[0,:] ** 2
 		rule = {'x': x, 'w': w}
 		return rule
 
@@ -278,6 +274,4 @@ class QuadratureRule(object):
 				return theta_uni, w_uni
 			else:
 				return np.delete(THETA, 0, 0), np.delete(W, 0, 0)
-
-
 
