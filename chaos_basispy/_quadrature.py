@@ -1,11 +1,18 @@
+"""
+Sparse Grid generator.
+
+Author: Panos Tsilifis
+Date: 8/25/2017
+
+"""
+
+__all__ = ['QuadratureRule']
+
+
 import numpy as np
 import math
 import itertools as itl
 from scipy import misc
-
-
-__all__ = ['QuadratureRule']
-
 
 
 class QuadratureRule(object):
@@ -87,21 +94,28 @@ class QuadratureRule(object):
 			return H
 
 
-	def GaussHermite(self, n):
+	def GaussHermite(self, n, odd = False):
 		assert n > 0
 		assert isinstance(n, int)
+		if odd:
+			n = 2 ** n - 1
 		d = np.sqrt(np.arange(n))[1:]
 		w = np.zeros(n)
 		H = np.diag(d, -1) + np.diag(d, 1)
 		[x, v] = np.linalg.eigh(H)
+		if odd:
+			x[(n-1)/2] = 0.
 		for i in range(n):
 			w[i] = 1 / np.sum(self.Hermite(x[i], n)**2)
-		return x, w
+		rule = {'x': x, 'w': w}
+		return rule
 
 
-	def GaussLegendre(self, n):
+	def GaussLegendre(self, n, odd = False):
 		assert n > 0
 		assert isinstance(n, int)
+		if odd:
+			n = 2 ** n - 1
 		d = np.sqrt([i**2/((2.*i+1.)*(2*i-1.)) for i in range(1,n)])
 		w = np.zeros(n)
 		H = np.diag(d, -1) + np.diag(d, 1)
@@ -110,7 +124,8 @@ class QuadratureRule(object):
 			w[i] = 1 / np.sum(self.Legendre(x[i], n) ** 2)
 		if (x.shape[0]-1) % 2 == 0:
 			x[(x.shape[0]-1) / 2] = 0.
-		return x, w
+		rule = {'x': x, 'w': w}
+		return rule
 
 
 	def Trapezoidal(self, l):
@@ -147,9 +162,10 @@ class QuadratureRule(object):
 		return x, w / 2.
 
 
-	def RuleDiff(self, rule1, rule2, nested = False):
-		if not nested:
-			return np.hstack([rule1[0], rule2[0]]), np.hstack([rule1[1], -rule2[1]])
+	def RuleDiff(self, rule1, rule2, nested = 'NN'):
+		assert nested in ['NN', 'FN'], 'Rules have to be either Non-nested (NN) or Fully-nested (FN)'
+		if nested == 'NN':
+			return np.hstack([rule1['x'], rule2['x']]), np.hstack([rule1['w'], -rule2['w']])
 		else:
 			locs = [i for i in range(len(rule1[0])) for j in range(len(rule2[0])) if rule1[0][i]==rule2[0][j]]
 			print locs
@@ -157,7 +173,7 @@ class QuadratureRule(object):
 			return rule1[0], rule1[1]
 
 
-	def get_rule(self, d, l, rule = 'GH'):
+	def get_rule(self, d, l, exp = True):
 		assert l > 0
 		assert d > 0
 		assert isinstance(l, int)
@@ -166,9 +182,11 @@ class QuadratureRule(object):
 		#assert rule in rules, 'Input rule not supported or non existing.'
 		if d == 1:
 			if self._rule == 'GH':
-				[x, w] = self.GaussHermite(l)
+				grid = self.GaussHermite(l, exp)
+				[x, w] = grid['x'], grid['w']
 			elif self._rule == 'GL':
-				[x, w] = self.GaussLegendre(l)
+				grid = self.GaussLegendre(l, exp)
+				[x, w] = grid['x'], grid['w']
 			elif self._rule == 'NC':
 				[x, w] = self.Trapezoidal(l)
 			else:
@@ -176,16 +194,18 @@ class QuadratureRule(object):
 			return x, w
 		else:
 			if self._rule in ['CC', 'NC']:
-				nested = True
+				nested = 'FN'
 			elif self._rule in ['GH', 'GL']:
-				nested = False
+				nested = 'NN'
 			d0 = d - 1
 			if self._rule == 'GH':
-				Q1 = [self.GaussHermite(i) for i in range(1,l+d0)]
-				D1 = [self.GaussHermite(1)]
+				Q1 = [self.GaussHermite(i, exp) for i in range(1,l+d0)]
+				H_rule = self.GaussHermite(1, exp)
+				D1 = [[H_rule['x'], H_rule['w']]]
 			elif self._rule == 'GL':
 				Q1 = [self.GaussLegendre(i) for i in range(1,l+d0)]
-				D1 = [self.GaussLegendre(1)]
+				L_rule = self.GaussLegendre(1)
+				D1 = [[L_rule['x'], L_rule['w']]]
 			elif self._rule == 'CC':
 				Q1 = [self.ClenshawCurtis(i) for i in range(1,l+d0)]
 				D1 = [self.ClenshawCurtis(1)]
@@ -201,14 +221,24 @@ class QuadratureRule(object):
 			for i in range(MI.shape[0]):
 				mi = MI[i,:]
 				k_abs = mi.sum()
-				x = [(y,) for y in Q1[l+d0-1-k_abs][0]]
-				w = [(y,) for y in Q1[l+d0-1-k_abs][1]]
+				x = [(y,) for y in Q1[l+d0-1-k_abs]['x']]
+				w = [(y,) for y in Q1[l+d0-1-k_abs]['w']]
 				for j in range(d0):
 					x = [u+(v,) for u in x for v in D1[mi[j]-1][0]]
 					w = [u+(v,) for u in w for v in D1[mi[j]-1][1]]
 				THETA = np.vstack([THETA, np.array(x)])
 				W = np.hstack([W, np.prod(np.array(w), axis = 1)])
-			return np.delete(THETA, 0, 0), np.delete(W, 0, 0)
+			if self._rule in ['GH', 'GL'] and exp == True:
+				W = np.delete(W, 0,0)
+				[theta_uni, ind, inv, c] = np.unique(np.delete(THETA,0,0), True, True, True, axis = 0)
+				locs = [j for j in range(c.shape[0]) if c[j] > 1]
+				w_uni = W[ind]
+				for j in locs:
+					loc_j = [k for k in range(inv.shape[0]) if inv[k] == j]
+					w_uni[j] = W[loc_j].sum()
+				return theta_uni, w_uni
+			else:
+				return np.delete(THETA, 0, 0), np.delete(W, 0, 0)
 
 
 
