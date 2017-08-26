@@ -18,7 +18,7 @@ from scipy import misc
 class QuadratureRule(object):
 
 
-	_rule_list = ['GL', 'GH', 'NC', 'CC']
+	_rule_list = ['GL', 'GH', 'NC', 'CC', 'GLag']
 	_rule = None
 
 
@@ -93,6 +93,22 @@ class QuadratureRule(object):
 			H = H / [math.sqrt(1. / (2.*i+1.)) for i in range(H.shape[0])]
 			return H
 
+	def Laguerre(self, x,n):
+		"""
+		Computes the Laguerre polynomials of 
+		order up to n at point x.
+		"""
+		if n == 1:
+			return 1.
+		else:
+			H = np.zeros(n)
+			H[0] = 1.
+			H[1] = 1. - x
+			for i in range(2, n):
+			#H[i] = (x - 2*(i-1) - 1.) * H[i-1] - (i-1)**2 * H[i-2]
+				H[i] = ((2*(i-1)+1-x)*H[i-1] - (i-1)*H[i-2]) / (i)
+			return H
+
 
 	def GaussHermite(self, n, odd = False):
 		assert n > 0
@@ -124,6 +140,22 @@ class QuadratureRule(object):
 			w[i] = 1 / np.sum(self.Legendre(x[i], n) ** 2)
 		if (x.shape[0]-1) % 2 == 0:
 			x[(x.shape[0]-1) / 2] = 0.
+		rule = {'x': x, 'w': w}
+		return rule
+
+
+	def GaussLaguerre(self, n, odd = False):
+		assert n > 0
+		assert isinstance(n, int)
+		if odd:
+			n = 2 ** n - 1
+		d = [i for i in range(1,n)]
+		alpha = [2*i+1 for i in range(n)]
+		w = np.zeros(n)
+		H = np.diag(alpha) + np.diag(d, -1) + np.diag(d, 1)
+		[x, v] = np.linalg.eigh(H)
+		for i in range(n):
+			w[i] = 1 / np.sum(self.Laguerre(x[i], n) ** 2)
 		rule = {'x': x, 'w': w}
 		return rule
 
@@ -187,6 +219,9 @@ class QuadratureRule(object):
 			elif self._rule == 'GL':
 				grid = self.GaussLegendre(l, exp)
 				[x, w] = grid['x'], grid['w']
+			elif self._rule == 'GLag':
+				grid = self.GaussLaguerre(l, exp)
+				[x, w] = grid['x'], grid['w']
 			elif self._rule == 'NC':
 				[x, w] = self.Trapezoidal(l)
 			else:
@@ -203,8 +238,12 @@ class QuadratureRule(object):
 				H_rule = self.GaussHermite(1, exp)
 				D1 = [[H_rule['x'], H_rule['w']]]
 			elif self._rule == 'GL':
-				Q1 = [self.GaussLegendre(i) for i in range(1,l+d0)]
-				L_rule = self.GaussLegendre(1)
+				Q1 = [self.GaussLegendre(i, exp) for i in range(1,l+d0)]
+				L_rule = self.GaussLegendre(1, exp)
+				D1 = [[L_rule['x'], L_rule['w']]]
+			elif self._rule == 'GLag':
+				Q1 = [self.GaussLaguerre(i, exp) for i in range(1,l+d0)]
+				L_rule = self.GaussLaguerre(1, exp)
 				D1 = [[L_rule['x'], L_rule['w']]]
 			elif self._rule == 'CC':
 				Q1 = [self.ClenshawCurtis(i) for i in range(1,l+d0)]
