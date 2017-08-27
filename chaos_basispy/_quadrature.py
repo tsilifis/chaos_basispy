@@ -168,7 +168,8 @@ class QuadratureRule(object):
 			w = np.array([2 ** (1.-l) for i in range(n)])
 			w[0] = w[0] / 2.
 			w[-1] = w[-1] / 2.
-		return x, w
+		rule = {'x': x, 'w': w}
+		return rule
 
 
 	def ClenshawCurtis(self, l):
@@ -187,18 +188,19 @@ class QuadratureRule(object):
 				s = [np.cos(2* math.pi * i * (j+1)/(n - 1.)) / (1. - 4*(j+1.)**2) for j in range((n-1)/2)]
 				s[-1] = s[-1] / 2.
 				w[i] = 2 * (1. + 2. * np.sum(s)) / (n - 1.)
-		return x, w / 2.
+		rule = {'x': x, 'w': w / 2.}
+		return rule
 
 
 	def RuleDiff(self, rule1, rule2, nested = 'NN'):
-		assert nested in ['NN', 'FN'], 'Rules have to be either Non-nested (NN) or Fully-nested (FN)'
-		if nested == 'NN':
-			return np.hstack([rule1['x'], rule2['x']]), np.hstack([rule1['w'], -rule2['w']])
-		else:
-			locs = [i for i in range(len(rule1[0])) for j in range(len(rule2[0])) if rule1[0][i]==rule2[0][j]]
-			print locs
-			rule1[1][locs] = rule1[1][locs] - rule2[1]
-			return rule1[0], rule1[1]
+		#assert nested in ['NN', 'FN'], 'Rules have to be either Non-nested (NN) or Fully-nested (FN)'
+		#if nested == 'NN':
+		return np.hstack([rule1['x'], rule2['x']]), np.hstack([rule1['w'], -rule2['w']])
+		#else:
+	#		locs = [i for i in range(len(rule1[0])) for j in range(len(rule2[0])) if rule1[0][i]==rule2[0][j]]
+		#	print locs
+		#	rule1[1][locs] = rule1[1][locs] - rule2[1]
+		#	return rule1[0], rule1[1]
 
 
 	def get_rule(self, d, l, exp = True):
@@ -219,15 +221,13 @@ class QuadratureRule(object):
 				grid = self.GaussLaguerre(l, exp)
 				[x, w] = grid['x'], grid['w']
 			elif self._rule == 'NC':
-				[x, w] = self.Trapezoidal(l)
+				grid = self.Trapezoidal(l)
+				[x, w] = grid['x'], grid['w']
 			else:
-				[x, w] = self.ClenshawCurtis(l)
+				grid = self.ClenshawCurtis(l)
+				[x, w] = grid['x'], grid['w']
 			return x, w
 		else:
-			if self._rule in ['CC', 'NC']:
-				nested = 'FN'
-			elif self._rule in ['GH', 'GL']:
-				nested = 'NN'
 			d0 = d - 1
 			if self._rule == 'GH':
 				Q1 = [self.GaussHermite(i, exp) for i in range(1,l+d0)]
@@ -243,10 +243,12 @@ class QuadratureRule(object):
 				D1 = [[L_rule['x'], L_rule['w']]]
 			elif self._rule == 'CC':
 				Q1 = [self.ClenshawCurtis(i) for i in range(1,l+d0)]
-				D1 = [self.ClenshawCurtis(1)]
+				CC_rule = self.ClenshawCurtis(1)
+				D1 = [[CC_rule['x'], CC_rule['w']]]
 			elif self._rule == 'NC':
 				Q1 = [self.Trapezoidal(i) for i in range(1,l+d0)]
-				D1 = [self.Trapezoidal(1)]
+				NC_rule = self.Trapezoidal(1)
+				D1 = [[NC_rule['x'], NC_rule['w']]]
 			for i in range(1,len(Q1)):
 				D1 = D1 + [self.RuleDiff(Q1[i], Q1[i-1])]
 
@@ -263,15 +265,19 @@ class QuadratureRule(object):
 					w = [u+(v,) for u in w for v in D1[mi[j]-1][1]]
 				THETA = np.vstack([THETA, np.array(x)])
 				W = np.hstack([W, np.prod(np.array(w), axis = 1)])
-			if self._rule in ['GH', 'GL'] and exp == True:
-				W = np.delete(W, 0,0)
-				[theta_uni, ind, inv, c] = np.unique(np.delete(THETA,0,0), True, True, True, axis = 0)
-				locs = [j for j in range(c.shape[0]) if c[j] > 1]
-				w_uni = W[ind]
-				for j in locs:
-					loc_j = [k for k in range(inv.shape[0]) if inv[k] == j]
-					w_uni[j] = W[loc_j].sum()
-				return theta_uni, w_uni
-			else:
-				return np.delete(THETA, 0, 0), np.delete(W, 0, 0)
+			#if self._rule in ['GH', 'GL', 'CC', 'NC'] and exp == True:
+			
+			W = np.delete(W, 0,0)
+			[theta_uni, ind, inv, c] = np.unique(np.delete(THETA,0,0), True, True, True, axis = 0)
+			locs = [j for j in range(c.shape[0]) if c[j] > 1]
+			w_uni = W[ind]
+			for j in locs:
+				loc_j = [k for k in range(inv.shape[0]) if inv[k] == j]
+				w_uni[j] = W[loc_j].sum()
+				
+			locs_0 = np.argwhere(np.abs(theta_uni.flatten()) < 1e-16)
+
+			theta_flat = theta_uni.flatten()
+			theta_flat[locs_0] = 0.
+			return theta_flat.reshape(w_uni.shape[0],d), w_uni
 
