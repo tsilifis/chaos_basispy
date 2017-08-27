@@ -72,10 +72,10 @@ Citation
 References
 ----------
 
-[1] C. Thimmisetty, P. Tsilifis and R.G. Ghanem, Polynomial Chaos basis adaptation for design optimization under uncertainty: Application to the oil well placement problem. To appear in Artificial Intelligence for Engineering Design, Analysis and Manufacturing, 2016.
+[1] Tipireddy, R. and Ghanem, R., Basis adaptation in homogeneous chaos spaces. Journal of Computational Physics, 259, pp.304-317 (2014).
 
-[2] Tipireddy, R. and Ghanem, R., Basis adaptation in homogeneous chaos spaces. Journal of Computational Physics, 259, pp.304-317, 2014.
+[2] Tsilifis, P. and Ghanem, R., Reduced Wiener Chaos representation of random fields via basis adaptation and projection. Journal of Computational Physics, 341, pp. 102-120 (2017).
 
-[3] Tsilifis, P. and Ghanem, R., Reduced Wiener Chaos representation of random fields via basis adaptation and projection. Journal of Computational Physics, 341, pp. 102-120, 2016.
+[3] C. Thimmisetty, P. Tsilifis and R.G. Ghanem, Polynomial Chaos basis adaptation for design optimization under uncertainty: Application to the oil well placement problem. Artificial Intelligence for Engineering Design, Analysis and Manufacturing, 31(3), 265-276 (2017).
 
-[4] Tsilifis, P.A., Reduced-dimensionality Legendre Chaos expansions via basis adaptation on 1d active subspaces. arXiv preprint arXiv:1611.02754, 2016.
+[4] Tsilifis, P.A., Reduced-dimensionality Legendre Chaos expansions via basis adaptation on 1d active subspaces. arXiv preprint arXiv:1611.02754 (2017).
