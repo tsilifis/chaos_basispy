@@ -267,17 +267,23 @@ class QuadratureRule(object):
 				W = np.hstack([W, np.prod(np.array(w), axis = 1)])
 			#if self._rule in ['GH', 'GL', 'CC', 'NC'] and exp == True:
 			
-			W = np.delete(W, 0,0)
-			[theta_uni, ind, inv, c] = np.unique(np.delete(THETA,0,0), True, True, True, axis = 0)
-			locs = [j for j in range(c.shape[0]) if c[j] > 1]
-			w_uni = W[ind]
-			for j in locs:
-				loc_j = [k for k in range(inv.shape[0]) if inv[k] == j]
-				w_uni[j] = W[loc_j].sum()
+			if l > 1:
+				W = np.delete(W, 0,0)
+				[theta_uni, ind, inv, c] = np.unique(np.delete(THETA,0,0), True, True, True, axis = 0)
+				locs = [j for j in range(c.shape[0]) if c[j] > 1]
+				w_uni = W[ind]
+				for j in locs:
+					loc_j = [k for k in range(inv.shape[0]) if inv[k] == j]
+					w_uni[j] = W[loc_j].sum()
 				
-			locs_0 = np.argwhere(np.abs(theta_uni.flatten()) < 1e-16)
+				locs_0 = np.argwhere(np.abs(theta_uni.flatten()) < 1e-16)
 
-			theta_flat = theta_uni.flatten()
-			theta_flat[locs_0] = 0.
-			return theta_flat.reshape(w_uni.shape[0],d), w_uni
+				theta_flat = theta_uni.flatten()
+				theta_flat[locs_0] = 0.
+				return theta_flat.reshape(w_uni.shape[0],d), w_uni
+			else:
+				return np.delete(THETA, 0,0), np.delete(W, 0,0)
+
+
+[x,w] = QuadratureRule('CC').get_rule(2,1)
 
