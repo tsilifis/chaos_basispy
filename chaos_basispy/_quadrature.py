@@ -60,58 +60,6 @@ class QuadratureRule(object):
 		return np.array(terms)
 
 
-	def Hermite(self, x,n):
-		"""
-		Computes the (probabilist's) Hermite polynomials of 
-		order up to n at point x. 
-		"""
-		if n == 1:
-			return 1.
-		else:
-			print n
-			H = np.zeros(n)
-			H[0] = 1.
-			H[1] = x
-			for i in range(2,n):
-				H[i] = x*H[i-1] - (i-1) * H[i-2]
-			H = H / [math.sqrt(math.factorial(i)) for i in range(H.shape[0])]
-			print H
-			return H
-
-
-	def Legendre(self, x,n):
-		"""
-		Computes the Legendre polynomials of 
-		order up to n at point x.
-		"""
-		if n == 1:
-			return 1.
-		else:
-			H = np.zeros(n)
-			H[0] = 1.
-			H[1] = x
-			for i in range(2, n):
-				H[i] = ( (2.*i-1.) * x * H[i-1] - (i - 1.) * H[i-2] ) / i
-			H = H / [math.sqrt(1. / (2.*i+1.)) for i in range(H.shape[0])]
-			return H
-
-	def Laguerre(self, x,n):
-		"""
-		Computes the Laguerre polynomials of 
-		order up to n at point x.
-		"""
-		if n == 1:
-			return 1.
-		else:
-			H = np.zeros(n)
-			H[0] = 1.
-			H[1] = 1. - x
-			for i in range(2, n):
-			#H[i] = (x - 2*(i-1) - 1.) * H[i-1] - (i-1)**2 * H[i-2]
-				H[i] = ((2*(i-1)+1-x)*H[i-1] - (i-1)*H[i-2]) / (i)
-			return H
-
-
 	def GaussHermite(self, n, odd = False):
 		assert n > 0
 		assert isinstance(n, int)
@@ -284,6 +232,4 @@ class QuadratureRule(object):
 			else:
 				return np.delete(THETA, 0,0), np.delete(W, 0,0)
 
-
-[x,w] = QuadratureRule('CC').get_rule(2,1)
 
