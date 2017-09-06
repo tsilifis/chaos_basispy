@@ -35,7 +35,7 @@ Module Requirements
 
 - Py-orthpol (available at https://github.com/PredictiveScienceLab/py-orthpol)
 
-*** UPDATE *** Dependence on py-orthpol will soon be removed and new polynomial chaos function will be included in the current package.
+*** UPDATE *** Dependence on py-orthpol will soon be removed and new polynomial chaos functions will be included in the current package.
 
 
 ### Other :
