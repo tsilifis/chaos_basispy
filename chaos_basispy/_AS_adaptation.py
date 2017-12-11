@@ -11,7 +11,11 @@ __all__ = ['ActiveSubspaceAdaptation', 'GaussianAdaptation', 'QuadraticAdaptatio
 
 import numpy as np
 import scipy.stats as st
-import orthpol
+from . import PolyBasis
+from . import MonicPoly
+from . import Hermite1d
+from . import Legendre1d
+from . import Laguerre1d
 from . import BasisAdaptation
 from . import dirac1D
 from . import diracND
@@ -40,15 +44,18 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
         assert isinstance(i, int)
         assert isinstance(j, int)
     	assert i < self._inp_dim and j < self._inp_dim
-        rvs = [st.norm()] * self._inp_dim
-        pol = orthpol.ProductBasis(rvs, degree = deg)
-        Q = len(pol._terms)
+        #rvs = [st.norm()] * self._inp_dim
+        
+        #pol = orthpol.ProductBasis(rvs, degree = deg)
+        pol = PolyBasis(self._inp_dim, deg)
+        terms = pol.mi_terms(self._inp_dim, deg)
+        Q = terms.shape[0]
         stiff = np.zeros((Q,Q))
         if self._poly_type == 'Legendre' or 'L':
             for k in range(Q):
                 for l in range(Q):
-                    alpha = pol._terms[k]
-                    beta = pol._terms[l]
+                    alpha = terms[k,:]
+                    beta = terms[l,:]
                     if i == j :
                         a_m = np.delete(alpha, i)
                         b_m = np.delete(beta, i)
@@ -69,8 +76,8 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
         elif self._poly_type == 'Hermite' or 'H':
             for k in range(Q):
                 for l in range(Q):
-                    alpha = pol._terms[k]
-                    beta = pol._terms[l]
+                    alpha = terms[k,:]
+                    beta = terms[l,:]
                     if alpha[i] - 1 < 0 or beta[j] - 1 < 0:
                         stiff[k,l] = 0
                     else:
@@ -88,12 +95,14 @@ class ActiveSubspaceAdaptation(BasisAdaptation):
         PCE of the QoI.
         """
         rvs = None
-        if self._poly_type == 'Hermite' or 'H':
-            rvs = [st.norm()] * self._inp_dim
-        elif self._poly_type == 'Legendre' or 'L':
-            rvs = [st.uniform()] * self._inp_dim
-        pol = orthpol.ProductBasis(rvs, degree = deg)
-        Q = len(pol._terms)
+        #if self._poly_type == 'Hermite' or 'H':
+        #    rvs = [st.norm()] * self._inp_dim
+        pol = PolyBasis(self._inp_dim, deg, self._poly_type[0])
+        #elif self._poly_type == 'Legendre' or 'L':
+        #    rvs = [st.uniform()] * self._inp_dim
+        #pol = orthpol.ProductBasis(rvs, degree = deg)
+        terms = pol.mi_terms(self._inp_dim, deg)
+        Q = terms.shape[0]
         assert Q == coeffs.shape[0]
         Grad_lo = np.zeros((self._inp_dim, self._inp_dim))
         for i in range(self._inp_dim):

@@ -96,14 +96,15 @@ quad_out = np.zeros(new_eta1.shape[0])
 for i in range(new_eta1.shape[0]):
     quad_out[i] = f(new_quad_points[:,i], a, b, c, W)
 
-import orthpol
+#import orthpol
 
 rvs = [st.uniform(loc = -1., scale = 2.)]
-pol = orthpol.ProductBasis(rvs, degree = 20)
+#pol = orthpol.ProductBasis(rvs, degree = 20)
+pol = cb.PolyBasis(1, 20, 'L')
 
 print weights.sum(), weights.shape
 
-coeffs = np.zeros(len(pol._terms))
+coeffs = np.zeros(pol.mi_terms(1, 20).shape[0])
 P = pol(zeta)
 
 for i in range(weights.shape[0]):
@@ -127,9 +128,10 @@ quad_out10 = np.zeros(quad_points.shape[0])
 for i in range(quad_out10.shape[0]):
     quad_out10[i] = f(quad_points[i,:], a, b, c, W)
 
-pol10d = orthpol.ProductBasis([st.uniform(loc = -1, scale = 2)]*dim, degree = 2)
+#pol10d = orthpol.ProductBasis([st.uniform(loc = -1, scale = 2)]*dim, degree = 2)
+pol10d = cb.PolyBasis(dim, 2, 'L')
 P10 = pol10d(quad_points)
-coeffs10 = np.zeros(len(pol10d._terms))
+coeffs10 = np.zeros(pol10d.mi_terms(dim, 2).shape[0])
 
 for i in range(wghts10.shape[0]):
     coeffs10 = coeffs10 + quad_out10[i] * wghts10[i] * P10[i,:]
