@@ -29,15 +29,20 @@ Module Requirements
 -------------------
 ### Python :
 
-- Numpy
+- Numpy (1.13.1)
 
-- Scipy
+- Scipy (0.18.1)
 
 - Py-orthpol (available at https://github.com/PredictiveScienceLab/py-orthpol)
+
+*** UPDATE *** Dependence on py-orthpol will soon be removed and new polynomial chaos functions will be included in the current package.
+
 
 ### Other :
 
 - Dakota (only necessary for generating sparse grids, available at https://dakota.sandia.gov/) 
+
+*** UPDATE *** New quadrature rules are available.  
 
 Module Capabilities
 -------------------
