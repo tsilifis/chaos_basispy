@@ -13,12 +13,13 @@ import numpy as np
 import math
 import itertools as itl
 from scipy import misc
+from . import MonicPoly
 
 
 class QuadratureRule(object):
 
 
-	_rule_list = ['GL', 'GH', 'NC', 'CC', 'GLag']
+	_rule_list = ['GL', 'GH', 'NC', 'CC', 'GLag', 'custom_pdf']
 	_rule = None
 
 
@@ -104,6 +105,20 @@ class QuadratureRule(object):
 		return rule
 
 
+	def Gauss(self, n, pdf, supp, odd = False):
+		assert n > 0
+		assert isinstance(n, int)
+		if odd:
+			n = 2 ** n - 1
+		monic = MonicPoly(n, pdf, supp)
+		alpha, beta = monic.recurr_coeffs()
+		H = np.diag(alpha) + np.diag(np.sqrt(beta), -1) + np.diag(np.sqrt(beta), 1)
+		[x, v] = np.linalg.eigh(H)
+		w = v[0,:] ** 2
+		rule = {'x': x, 'w': w}
+		return rule
+
+
 	def Trapezoidal(self, l):
 		assert l > 0
 		assert isinstance(l, int)
@@ -151,7 +166,7 @@ class QuadratureRule(object):
 		#	return rule1[0], rule1[1]
 
 
-	def get_rule(self, d, l, exp = True):
+	def get_rule(self, d, l, exp = True, custom = None):
 		assert l > 0
 		assert d > 0
 		assert isinstance(l, int)
@@ -171,10 +186,14 @@ class QuadratureRule(object):
 			elif self._rule == 'NC':
 				grid = self.Trapezoidal(l)
 				[x, w] = grid['x'], grid['w']
-			else:
+			elif self._rule == 'CC':
 				grid = self.ClenshawCurtis(l)
 				[x, w] = grid['x'], grid['w']
-			return x, w
+			else:
+				print ('Custom Gauss Quadrature does not support exponential level growth. Using linear growth...')
+				grid = self.Gauss(l, custom['pdf'], custom['supp'], False)
+				[x, w] = grid['x'], grid['w']
+			return x.reshape(x.shape[0], 1), w
 		else:
 			d0 = d - 1
 			if self._rule == 'GH':
@@ -197,6 +216,11 @@ class QuadratureRule(object):
 				Q1 = [self.Trapezoidal(i) for i in range(1,l+d0)]
 				NC_rule = self.Trapezoidal(1)
 				D1 = [[NC_rule['x'], NC_rule['w']]]
+			elif self._rule == 'custom_pdf':
+				print ('Custom Gauss Quadrature does not support exponential level growth. Using linear growth...')
+				Q1 = [self.Gauss(i, custom['pdf'], custom['supp'], False) for i in range(1, l+d0)]
+				G_rule = self.Gauss(1, custom['pdf'], custom['supp'], False)
+				D1 = [[G_rule['x'], G_rule['w']]]
 			for i in range(1,len(Q1)):
 				D1 = D1 + [self.RuleDiff(Q1[i], Q1[i-1])]
 
