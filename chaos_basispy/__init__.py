@@ -8,6 +8,7 @@ Date : 2/7/2017
 
 from _tools import *
 from _poly_basis import *
+from _poly_chaos import *
 from _basis_adaptation import *
 from _AS_adaptation import *
 from _quadrature import *
