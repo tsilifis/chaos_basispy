@@ -7,6 +7,7 @@ Author:       Panagiotis Tsilifis
 Affiliation:  Sonny Astani Department of Civil Engineering, 
               University of Southern California, Los Angeles, CA 90089, USA
 
+email address: tsilifis@usc.edu
 
 Description
 -----------
