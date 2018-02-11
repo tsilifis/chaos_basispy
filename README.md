@@ -1,5 +1,5 @@
 # chaos_basispy
-Polynomial Chaos Basis Adaptation
+Polynomial Chaos Basis Reduction
 =================================
 
 Author:       Panagiotis Tsilifis
@@ -68,7 +68,7 @@ Citation
 
     @Misc{chaos_basispy2017,
       author =   {Tsilifis, P.},
-      title =    {chaos_basispy: A Polynomial Chaos basis adaptation framework in python},
+      title =    {chaos_basispy: A Polynomial Chaos basis reduction framework in python},
       howpublished = {\url{https://github.com/tsilifis/chaos_basispy}},
       year = {since 2017}
     }
