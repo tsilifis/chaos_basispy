@@ -65,12 +65,12 @@ To quickly validate that the package is properly installed and bug-free, please 
 
 Citation
 --------
-
-    @Misc{chaos_basispy2018,
-      author =   {Tsilifis, P.},
-      title =    {chaos_basispy: A Polynomial Chaos basis reduction framework in python},
+      
+    @misc{chaos_basispy2018,
+      author = {Tsilifis, P.},
+      title = {\texttt{chaos\char`_basispy}: A Polynomial Chaos basis reduction framework in python},
       howpublished = {\url{https://github.com/tsilifis/chaos_basispy}},
-      year = {since 2017}
+      year = {since 2017} 
     }
 
 References
