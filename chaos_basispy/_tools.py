@@ -12,7 +12,6 @@ __all__ = ['dirac1D', 'diracND', 'grad_inner_prod_Legendre', 'gradgrad_inner_pro
 
 import numpy as np
 import scipy.stats as st
-import orthpol
 from scipy import interpolate
 
 def dirac1D(a,b):
