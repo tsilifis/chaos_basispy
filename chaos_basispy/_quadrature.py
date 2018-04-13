@@ -13,6 +13,7 @@ import numpy as np
 import math
 import itertools as itl
 from scipy import misc
+from scipy.linalg import eigh_tridiagonal
 from . import MonicPoly
 
 
@@ -67,8 +68,9 @@ class QuadratureRule(object):
 		if odd:
 			n = 2 ** n - 1
 		d = np.sqrt(np.arange(n))[1:]
-		H = np.diag(d, -1) + np.diag(d, 1)
-		[x, v] = np.linalg.eigh(H)
+		#H = np.diag(d, -1) + np.diag(d, 1)
+		#[x, v] = np.linalg.eigh(H)
+		[x, v] = eigh_tridiagonal(np.zeros(n), d)
 		if odd:
 			x[(n-1)/2] = 0.
 		w = v[0,:] ** 2
@@ -82,8 +84,9 @@ class QuadratureRule(object):
 		if odd:
 			n = 2 ** n - 1
 		d = np.sqrt([i**2/((2.*i+1.)*(2*i-1.)) for i in range(1,n)])
-		H = np.diag(d, -1) + np.diag(d, 1)
-		[x, v] = np.linalg.eigh(H)
+		#H = np.diag(d, -1) + np.diag(d, 1)
+		#[x, v] = np.linalg.eigh(H)
+		[x, v] = eigh_tridiagonal(np.zeros(n), d)
 		w = v[0,:] ** 2
 		if (x.shape[0]-1) % 2 == 0:
 			x[(x.shape[0]-1) / 2] = 0.
@@ -98,8 +101,9 @@ class QuadratureRule(object):
 			n = 2 ** n - 1
 		d = [i for i in range(1,n)]
 		alpha = [2*i+1 for i in range(n)]
-		H = np.diag(alpha) + np.diag(d, -1) + np.diag(d, 1)
-		[x, v] = np.linalg.eigh(H)
+		#H = np.diag(alpha) + np.diag(d, -1) + np.diag(d, 1)
+		#[x, v] = np.linalg.eigh(H)
+		[x, v] = eigh_tridiagonal(alpha, d)
 		w = v[0,:] ** 2
 		rule = {'x': x, 'w': w}
 		return rule
@@ -112,8 +116,9 @@ class QuadratureRule(object):
 			n = 2 ** n - 1
 		monic = MonicPoly(n, pdf, supp)
 		alpha, beta = monic.recurr_coeffs()
-		H = np.diag(alpha) + np.diag(np.sqrt(beta), -1) + np.diag(np.sqrt(beta), 1)
-		[x, v] = np.linalg.eigh(H)
+		#H = np.diag(alpha) + np.diag(np.sqrt(beta), -1) + np.diag(np.sqrt(beta), 1)
+		#[x, v] = np.linalg.eigh(H)
+		[x, v] = eigh_tridiagonal(alpha, np.sqrt(beta))
 		w = v[0,:] ** 2
 		rule = {'x': x, 'w': w}
 		return rule
