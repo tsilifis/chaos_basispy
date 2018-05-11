@@ -76,10 +76,14 @@ Citation
 References
 ----------
 
-[1] Tipireddy, R. and Ghanem, R., Basis adaptation in homogeneous chaos spaces. Journal of Computational Physics, 259, pp.304-317 (2014).
+[1] R. Tipireddy and R. Ghanem, Basis adaptation in homogeneous chaos spaces. Journal of Computational Physics, 259, pp.304-317 (2014).
 
-[2] Tsilifis, P. and Ghanem, R., Reduced Wiener Chaos representation of random fields via basis adaptation and projection. Journal of Computational Physics, 341, pp. 102-120 (2017).
+[2] P. Tsilifis and R. Ghanem, Reduced Wiener Chaos representation of random fields via basis adaptation and projection. Journal of Computational Physics, 341, pp. 102-120 (2017).
 
 [3] C. Thimmisetty, P. Tsilifis and R.G. Ghanem, Polynomial Chaos basis adaptation for design optimization under uncertainty: Application to the oil well placement problem. Artificial Intelligence for Engineering Design, Analysis and Manufacturing, 31(3), 265-276 (2017).
 
-[4] Tsilifis, P.A., Reduced-dimensionality Legendre Chaos expansions via basis adaptation on 1d active subspaces. arXiv preprint arXiv:1611.02754 (2017).
+[4] P.A. Tsilifis, Reduced-dimensionality Legendre Chaos expansions via basis adaptation on 1d active subspaces. Submitted to ASME Journal of VV & UQ, arXiv preprint arXiv:1611.02754 (2017).
+
+[5] P. Tsilifis, X. Huan, C. Safta, K. Sargsyan, G. Lacaze, J. Oefelein, H. Najm and R. Ghanem, Compressive sensing adaptation for polynomial chaos expansions. Submitted to Journal of Computational Physics, arXiv preprint arxiv:1801.01961 (2018).
+
+[6] P. Tsilifis and R. Ghanem, Bayesian adaptation of chaos representations using variational inference and sampling on geodesics. Submitted to Proceedings of the Royal Society A (2018). 
