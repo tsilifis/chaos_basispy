@@ -36,12 +36,12 @@ Module Requirements
 
 *** UPDATE *** Dependence on py-orthpol has been removed and new polynomial chaos functions will be included in the current package under the module _poly_basis.
 
+*** UPDATE *** New quadrature rules are available under the module _quadrature.  
 
-### Other :
+### Optional :
 
 - Dakota (only necessary for generating sparse grids, available at https://dakota.sandia.gov/) 
 
-*** UPDATE *** New quadrature rules are available under the module _quadrature.  
 
 Module Capabilities
 -------------------
