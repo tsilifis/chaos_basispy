@@ -82,7 +82,7 @@ References
 
 [3] C. Thimmisetty, P. Tsilifis and R.G. Ghanem, **Polynomial Chaos basis adaptation for design optimization under uncertainty: Application to the oil well placement problem**. *Artificial Intelligence for Engineering Design, Analysis and Manufacturing*, 31(3), 265-276 (2017).
 
-[4] P.A. Tsilifis, **Reduced-dimensionality Legendre Chaos expansions via basis adaptation on 1d active subspaces**. *Submitted to ASME Journal of VV & UQ, arXiv preprint arXiv:1611.02754* (2017).
+[4] P.A. Tsilifis, **Gradient-Informed Basis Adaptation for Legendre Chaos Expansions**. *ASME. J. Verif. Valid. Uncert. Quant. 3(1) 011005, doi:10.1115/1.4040802* (2018).
 
 [5] P. Tsilifis, X. Huan, C. Safta, K. Sargsyan, G. Lacaze, J. Oefelein, H. Najm and R. Ghanem, **Compressive sensing adaptation for polynomial chaos expansions**. *Submitted to Journal of Computational Physics, arXiv preprint arxiv:1801.01961* (2018).
 
