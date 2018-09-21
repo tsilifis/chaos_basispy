@@ -84,7 +84,7 @@ References
 
 [4] P.A. Tsilifis, **Gradient-Informed Basis Adaptation for Legendre Chaos Expansions**. *ASME. J. Verif. Valid. Uncert. Quant.*, 3(1) 011005, https://doi.org/10.1115/1.4040802 (2018).
 
-[5] P. Tsilifis and R. Ghanem, **Bayesian adaptation of chaos representations using variational inference and sampling on geodesics**. *Accepted manuscript to appear in Proceedings of the Royal Society A* (2018). 
+[5] P. Tsilifis and R. Ghanem, **Bayesian adaptation of chaos representations using variational inference and sampling on geodesics**. *Proc. R. Soc. A* 474 20180285, https://dx.doi.org/10.1098/rpsa.2018.0285 (2018). 
 
 [6] P. Tsilifis, X. Huan, C. Safta, K. Sargsyan, G. Lacaze, J. Oefelein, H. Najm and R. Ghanem, **Compressive sensing adaptation for polynomial chaos expansions**. *Submitted to Journal of Computational Physics, arXiv preprint arxiv:1801.01961* (2018).
 
