@@ -1,13 +1,13 @@
 # chaos_basispy
-Polynomial Chaos Basis Reduction
-=================================
+A Polynomial Chaos Basis Reduction module
+=======================================
 
 Author:       Panagiotis Tsilifis
 
-Affiliation:  Sonny Astani Department of Civil Engineering, 
-              University of Southern California, Los Angeles, CA 90089, USA
+Affiliation:  CSQI, Institure of Mathematics, 
+              École Polytechnique Fédérale de Lausanne, Lausanne, CH-1015, Switzerland
 
-email address: tsilifis@usc.edu
+email address: panagiotis.tsilifis@epfl.ch
 
 Description
 -----------
@@ -34,14 +34,6 @@ Module Requirements
 
 - Scipy (0.18.1)
 
-*** UPDATE *** Dependence on py-orthpol has been removed and new polynomial chaos functions will be included in the current package under the module _poly_basis.
-
-*** UPDATE *** New quadrature rules are available under the module _quadrature.  
-
-### Optional :
-
-- Dakota (only necessary for generating sparse grids, available at https://dakota.sandia.gov/) 
-
 
 Module Capabilities
 -------------------
@@ -61,7 +53,9 @@ Further capabilities of computing the new coefficients of adapted PCE's by linki
 Demos
 -----
 
-To quickly validate that the package is properly installed and bug-free, please see the /demos directory. Currently only demo1 is complete. For details on the demo please see section 3.1 in [4]. Demo2 and more are coming soon...
+The 'demo0' and 'demo1' directories contains scripts that test the performance of PolyBasis, PolyChaos and Quadrature classes that construct uni- and multi-dimensional polynomials, generate quadrature rules and compute the chaos coefficients. 
+More demos on the basis adaptation techniques are coming soon...
+<!--To quickly validate that the package is properly installed and bug-free, please see the /demos directory. Currently only demo1 is complete. For details on the demo please see section 3.1 in [4]. Demo2 and more are coming soon...-->
 
 Citation
 --------
@@ -76,7 +70,7 @@ Citation
 References
 ----------
 
-[1] R. Tipireddy and R. Ghanem, **Basis adaptation in homogeneous chaos spaces**. *Journal of Computational Physics*, 259, pp.304-317 (2014).
+[1] R. Tipireddy and R. Ghanem, **Basis adaptation in homogeneous chaos spaces**. *Journal of Computational Physics*, 259, pp.304-317, https://doi.org/10.1016/j.jcp.2013.12.009 (2014).
 
 [2] P. Tsilifis and R. Ghanem, **Reduced Wiener Chaos representation of random fields via basis adaptation and projection**. *Journal of Computational Physics*, 341, pp. 102-120, https://doi.org/10.1016/j.jcp.2017.04.009 (2017).
 
