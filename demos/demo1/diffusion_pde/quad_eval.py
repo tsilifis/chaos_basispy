@@ -73,14 +73,18 @@ def forward(xs):
     return phi().reshape(nx, nx)
 
 
-[x_quad, w_quad] = cb.QuadratureRule('CC').get_rule(2, 5)
+
 #plt.plot(x_quad[:,0], x_quad[:,1], '*')
 #plt.show()
-print x_quad.shape[0]
-u_quad = np.zeros((51, 51, x_quad.shape[0]))
+max_lev = 8
+for l in range(2,max_lev+1):
+    print '-'*5 + 'Running model at quadrature rule level '+ str(l) + ' points.' + '-'*5
+    [x_quad, w_quad] = cb.QuadratureRule('CC').get_rule(2, l)
 
-for i in range(x_quad.shape[0]):
-    print 'Run ' + str(i+1)
-    u_quad[:,:,i] = forward(x_quad[i,:])
+    u_quad = np.zeros((51, 51, x_quad.shape[0]))
 
-np.save('u_quad.npy', u_quad)
+    for i in range(x_quad.shape[0]):
+        print 'Run ' + str(i+1)
+        u_quad[:,:,i] = forward(x_quad[i,:])
+
+    np.save('u_quad_lev_'+str(l)+'.npy', u_quad)
