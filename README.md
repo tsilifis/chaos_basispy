@@ -53,7 +53,7 @@ Further capabilities of computing the new coefficients of adapted PCE's by linki
 Demos
 -----
 
-The `demo0` and `demo1` directories contains scripts that test the performance of PolyBasis, PolyChaos and Quadrature classes that construct uni- and multi-dimensional polynomials, generate quadrature rules and compute the chaos coefficients. 
+The `demo0` and `demo1` directories contain scripts that test the performance of PolyBasis, PolyChaos and Quadrature classes that construct uni- and multi-dimensional polynomials, generate quadrature rules and compute the chaos coefficients. 
 More demos on the basis adaptation techniques are coming soon...
 <!--To quickly validate that the package is properly installed and bug-free, please see the /demos directory. Currently only demo1 is complete. For details on the demo please see section 3.1 in [4]. Demo2 and more are coming soon...-->
 
