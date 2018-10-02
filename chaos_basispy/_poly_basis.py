@@ -214,13 +214,17 @@ class PolyBasis(object):
         return PSI
 
 
-    def mi_terms(self, dim, order):
+    def mi_terms(self, dim = None, order = None):
         """ matrix of basis terms
         Input
         :order: PCE order
         :dim: PCE dimension
             
         """
+        if dim is None:
+            dim = self._dim
+        if order is None:
+            order = self._degree
 
         q_num = [int(misc.comb(dim+i-1, i)) for i in range(order+1)]
         mul_ind = np.array(np.zeros(dim, dtype = int), dtype = int)
