@@ -45,33 +45,39 @@ xx, yy = np.meshgrid(x, y)
 XI = np.vstack([xx.flatten(), yy.flatten()]).T
 print XI.shape
 u_chaos_ord2 = np.zeros((x.shape[0], y.shape[0], 7))
+u_chaos_ord3 = np.zeros((x.shape[0], y.shape[0], 7))
+u_chaos_ord4 = np.zeros((x.shape[0], y.shape[0], 7))
+u_chaos_ord5 = np.zeros((x.shape[0], y.shape[0], 7))
+u_chaos_ord6 = np.zeros((x.shape[0], y.shape[0], 7))
+
 for i in range(7):
 	coeffs2[i, :] = chaos.comp_coeffs(x_quads[i], u_quads[i], w_quads[i], 2, 'L')
 	u_chaos_ord2[:,:,i] = np.dot(cb.PolyBasis(2, 2)(XI), coeffs2[i,:]).reshape(51, 51)
 	coeffs3[i, :] = chaos.comp_coeffs(x_quads[i], u_quads[i], w_quads[i], 3, 'L')
+	u_chaos_ord3[:,:,i] = np.dot(cb.PolyBasis(2, 3)(XI), coeffs3[i,:]).reshape(51, 51)
 	coeffs4[i, :] = chaos.comp_coeffs(x_quads[i], u_quads[i], w_quads[i], 4, 'L')
+	u_chaos_ord4[:,:,i] = np.dot(cb.PolyBasis(2, 4)(XI), coeffs4[i,:]).reshape(51, 51)
 	coeffs5[i, :] = chaos.comp_coeffs(x_quads[i], u_quads[i], w_quads[i], 5, 'L')
+	u_chaos_ord5[:,:,i] = np.dot(cb.PolyBasis(2, 5)(XI), coeffs5[i,:]).reshape(51, 51)
 	coeffs6[i, :] = chaos.comp_coeffs(x_quads[i], u_quads[i], w_quads[i], 6, 'L')
+	u_chaos_ord6[:,:,i] = np.dot(cb.PolyBasis(2, 6)(XI), coeffs6[i,:]).reshape(51, 51)
 	coeffs7[i, :] = chaos.comp_coeffs(x_quads[i], u_quads[i], w_quads[i], 7, 'L')
 	coeffs8[i, :] = chaos.comp_coeffs(x_quads[i], u_quads[i], w_quads[i], 8, 'L')
 	coeffs9[i, :] = chaos.comp_coeffs(x_quads[i], u_quads[i], w_quads[i], 9, 'L')
 	coeffs10[i, :] = chaos.comp_coeffs(x_quads[i], u_quads[i], w_quads[i], 10, 'L')
 
-fig = plt.figure(figsize = (10,7))
-ax1 = fig.add_subplot(231)
-ax1.contourf(x, y, u_chaos_ord2[:,:,0], 50)
-ax2 = fig.add_subplot(232)
-ax2.contourf(x, y, u_chaos_ord2[:,:,1], 50)
-ax3 = fig.add_subplot(233)
-ax3.contourf(x, y, u_chaos_ord2[:,:,2], 50)
-ax4 = fig.add_subplot(234)
-ax4.contourf(x, y, u_chaos_ord2[:,:,3], 50)
-ax5 = fig.add_subplot(235)
-ax5.contourf(x, y, u_chaos_ord2[:,:,4], 50)
-ax6 = fig.add_subplot(236)
-ax6.contourf(x, y, u_chaos_ord2[:,:,5], 50)
-#ax7 = fig.add_subplot(237)
-#ax7.contourf(x, y, u_chaos_ord2[:,:,6], 50)
+
+coeffs_all = [coeffs2, coeffs3, coeffs4, coeffs5, coeffs6, coeffs7, coeffs8, coeffs9, coeffs10]
+
+fig, axes = plt.subplots(nrows = 2, ncols = 3, figsize = (12, 6))
+i = 0
+for ax in axes.flat:
+	im = ax.contourf(x, y, u_chaos_ord6[:,:,i], 50)
+	i = i + 1
+
+fig.subplots_adjust(right = 0.8)
+cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+fig.colorbar(im, cax = cbar_ax)
 plt.show()
 
 plt.plot(coeffs2[0,:], '-x')
@@ -82,3 +88,20 @@ plt.plot(coeffs2[4,:], '-*')
 plt.plot(coeffs2[5,:], '-^')
 plt.plot(coeffs2[6,:], '--.')
 plt.show()
+
+### --- Estimate truncation error ---
+
+err = np.zeros((7, 9))
+for i in range(7):
+	for j in range(9):
+		err[i,j] = (( u_quads[-1] - np.dot(cb.PolyBasis(2, j+2)(x_quads[-1]), coeffs_all[j][i,:]) )**2 * w_quads[-1]).sum()# / (u_quads[-1]**2 * w_quads[-1]).sum()
+
+lev = [2, 3, 4, 5, 6, 7, 8]
+Q = [2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+#fig = plt.figure()
+#ax = fig.add_subplot(111)
+plt.contour(Q, lev, err, 30)
+plt.colorbar()
+plt.show()
+
