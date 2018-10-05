@@ -28,7 +28,7 @@ Due to the above, this module considers only Hermite and Legendre Chaos expansio
 
 Module Requirements
 -------------------
-### Python :
+### Python 2.7:
 
 - Numpy (1.13.1)
 
