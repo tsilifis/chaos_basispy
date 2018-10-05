@@ -8,7 +8,7 @@ using different orthogonalization methods
 """
 import numpy as np 
 import matplotlib.pyplot as plt
-import chaos_toolbox as ct
+import chaos_basispy as cb
 import matplotlib
 matplotlib.rcParams.update({'font.size': 7})
 
@@ -17,9 +17,9 @@ def visualize_isometry(d):
     d
     qe = np.random.normal(size=(d,))
     
-    A0 = ct.chaos.BasisAdapt().gauss_adaptation(qe, d, method = 0)
-    A1 = ct.chaos.BasisAdapt().gauss_adaptation(qe, d, method = 1)
-    A2 = ct.chaos.BasisAdapt().gauss_adaptation(qe, d, method = 2)
+    A0 = cb.BasisAdapt().gauss_adaptation(qe, d, method = 0)
+    A1 = cb.BasisAdapt().gauss_adaptation(qe, d, method = 1)
+    A2 = cb.BasisAdapt().gauss_adaptation(qe, d, method = 2)
     
     fig = plt.figure() 
     ax = fig.add_subplot(1,3,1)
