@@ -16,13 +16,15 @@ chaos = cb.PolyChaos()
 x_quads = [x2, x3, x4, x5, x6, x7, x8]
 w_quads = [w2, w3, w4, w5, w6, w7, w8]
 
-u2 = np.load('u_quad_lev_2.npy')[25,25,:]
-u3 = np.load('u_quad_lev_3.npy')[25,25,:]
-u4 = np.load('u_quad_lev_4.npy')[25,25,:]
-u5 = np.load('u_quad_lev_5.npy')[25,25,:]
-u6 = np.load('u_quad_lev_6.npy')[25,25,:]
-u7 = np.load('u_quad_lev_7.npy')[25,25,:]
-u8 = np.load('u_quad_lev_8.npy')[25,25,:]
+loc_x, loc_y = 0, -1 # The spatial location of the QoI
+
+u2 = np.load('u_quad_lev_2.npy')[loc_x,loc_y,:]
+u3 = np.load('u_quad_lev_3.npy')[loc_x,loc_y,:]
+u4 = np.load('u_quad_lev_4.npy')[loc_x,loc_y,:]
+u5 = np.load('u_quad_lev_5.npy')[loc_x,loc_y,:]
+u6 = np.load('u_quad_lev_6.npy')[loc_x,loc_y,:]
+u7 = np.load('u_quad_lev_7.npy')[loc_x,loc_y,:]
+u8 = np.load('u_quad_lev_8.npy')[loc_x,loc_y,:]
 
 u_quads = [u2, u3, u4, u5, u6, u7, u8]
 
@@ -72,7 +74,7 @@ coeffs_all = [coeffs2, coeffs3, coeffs4, coeffs5, coeffs6, coeffs7, coeffs8, coe
 fig, axes = plt.subplots(nrows = 2, ncols = 3, figsize = (12, 6))
 i = 0
 for ax in axes.flat:
-	im = ax.contourf(x, y, u_chaos_ord6[:,:,i], 50)
+	im = ax.contourf(x, y, u_chaos_ord6[:,:,i+1], 50)
 	i = i + 1
 
 fig.subplots_adjust(right = 0.8)
@@ -80,13 +82,13 @@ cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
 fig.colorbar(im, cax = cbar_ax)
 plt.show()
 
-plt.plot(coeffs2[0,:], '-x')
-plt.plot(coeffs2[1,:], '-s')
-plt.plot(coeffs2[2,:], '-+')
-plt.plot(coeffs2[3,:], '-d')
-plt.plot(coeffs2[4,:], '-*')
-plt.plot(coeffs2[5,:], '-^')
-plt.plot(coeffs2[6,:], '--.')
+plt.plot(coeffs4[0,:], '-x')
+plt.plot(coeffs4[1,:], '-s')
+plt.plot(coeffs4[2,:], '-+')
+plt.plot(coeffs4[3,:], '-d')
+plt.plot(coeffs4[4,:], '-*')
+plt.plot(coeffs4[5,:], '-^')
+plt.plot(coeffs4[6,:], '--.')
 plt.show()
 
 ### --- Estimate truncation error ---
@@ -94,14 +96,14 @@ plt.show()
 err = np.zeros((7, 9))
 for i in range(7):
 	for j in range(9):
-		err[i,j] = (( u_quads[-1] - np.dot(cb.PolyBasis(2, j+2)(x_quads[-1]), coeffs_all[j][i,:]) )**2 * w_quads[-1]).sum()# / (u_quads[-1]**2 * w_quads[-1]).sum()
+		err[i,j] = (( u_quads[-1] - np.dot(cb.PolyBasis(2, j+2)(x_quads[-1]), coeffs_all[j][i,:]) )**2 * w_quads[-1]).sum() / (u_quads[-1]**2 * w_quads[-1]).sum()
 
 lev = [2, 3, 4, 5, 6, 7, 8]
 Q = [2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 #fig = plt.figure()
 #ax = fig.add_subplot(111)
-plt.contour(Q, lev, err, 30)
+plt.contour(Q, lev, err, 50)
 plt.colorbar()
 plt.show()
 
