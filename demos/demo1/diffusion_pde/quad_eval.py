@@ -85,6 +85,6 @@ for l in range(2,max_lev+1):
 
     for i in range(x_quad.shape[0]):
         print 'Run ' + str(i+1)
-        u_quad[:,:,i] = forward(x_quad[i,:])
+        u_quad[:,:,i] = forward((x_quad[i,:] + np.ones(2)) / 2)
 
     np.save('u_quad_lev_'+str(l)+'.npy', u_quad)
