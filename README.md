@@ -80,5 +80,5 @@ References
 
 [5] P. Tsilifis and R. Ghanem, **Bayesian adaptation of chaos representations using variational inference and sampling on geodesics**. *Proc. R. Soc. A* 474 20180285, https://dx.doi.org/10.1098/rspa.2018.0285 (2018). 
 
-[6] P. Tsilifis, X. Huan, C. Safta, K. Sargsyan, G. Lacaze, J. Oefelein, H. Najm and R. Ghanem, **Compressive sensing adaptation for polynomial chaos expansions**. *Submitted to Journal of Computational Physics, arXiv preprint arxiv:1801.01961* (2018).
+[6] P. Tsilifis, X. Huan, C. Safta, K. Sargsyan, G. Lacaze, J. Oefelein, H. Najm and R. Ghanem, **Compressive sensing adaptation for polynomial chaos expansions**. *Journal of Computational Physics*, 380, pp. 29-47, https://doi.org/10.1016/j.jcp.2018.12.010 (2019).
 
