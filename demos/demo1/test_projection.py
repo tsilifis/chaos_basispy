@@ -11,7 +11,6 @@ Date : 2/8/2017
 
 import numpy as np 
 import scipy.stats as st 
-import orthpol
 import chaos_basispy as cb
 import matplotlib.pyplot as plt
 
@@ -31,18 +30,17 @@ c = np.random.normal()
 print 'POLYNOMIAL COEFFICIENTS : '
 print a, b, c
 
-rvs = [st.uniform(loc = -1., scale = 2.)] * dim
-pol = orthpol.ProductBasis(rvs, degree = 2)
+pol = cb.PolyBasis(dim, 2, 'L')
 
 xi = st.uniform.rvs(loc = -1. ,scale = 2., size = (100,dim))
 
 
-coeffs = np.zeros(len(pol._terms))
+coeffs = np.zeros(len(pol.mi_terms(dim, 2)))
 coeffs[0] = a + c*np.sum(W[:,0]**2) / 3.
 for i in range(1, 11):
     coeffs[i] = W[i-1,0] * b / np.sqrt(3.)
 for i in range(11,66):
-    alpha = pol._terms[i]
+    alpha = pol.mi_terms(dim, 2)[i]
     coeffs[i] = (2/3.) * c * np.prod( W[:,0] ** alpha)
     if alpha.max() == 2:
         coeffs[i] = coeffs[i] / np.sqrt(5)
