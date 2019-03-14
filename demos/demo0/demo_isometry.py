@@ -38,3 +38,4 @@ def visualize_isometry(d):
 
 if __name__ == '__main__':
     visualize_isometry(d = 15)
+    plt.show()

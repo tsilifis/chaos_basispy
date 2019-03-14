@@ -16,7 +16,7 @@ chaos = cb.PolyChaos()
 x_quads = [x2, x3, x4, x5, x6, x7, x8]
 w_quads = [w2, w3, w4, w5, w6, w7, w8]
 
-loc_x, loc_y = 0, -1 # The spatial location of the QoI
+loc_x, loc_y = -1, -1 # The spatial location of the QoI
 
 u2 = np.load('u_quad_lev_2.npy')[loc_x,loc_y,:]
 u3 = np.load('u_quad_lev_3.npy')[loc_x,loc_y,:]
@@ -103,7 +103,7 @@ Q = [2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 #fig = plt.figure()
 #ax = fig.add_subplot(111)
-plt.contour(Q, lev, err, 50)
+plt.contourf(Q, lev, err, 100)
 plt.colorbar()
 plt.show()
 

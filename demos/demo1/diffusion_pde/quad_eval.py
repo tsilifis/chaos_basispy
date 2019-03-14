@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 
 def forward(xs):
 
-    nx = 51
+    nx = 21
     ny = nx
     dx = 1./51 
     dy = dx
