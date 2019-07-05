@@ -215,7 +215,7 @@ class PolyBasis(object):
         return PSI
 
 
-    def mi_terms(self, dim = None, order = None, trunc = 'TD'):
+    def mi_terms(self, dim = None, order = None, trunc = 'TD', q = None):
         """ matrix of multi-indices corresponding to basis terms
         Input
         :order: PCE order
@@ -226,14 +226,14 @@ class PolyBasis(object):
             'LQ' --> l_q truncation (sum alpha_i^q <= order^q)
             'HC' --> hyperbolic cross (prod [alpha_i+1] <= [order + 1])
         """
-        assert trunc in ['TD', 'TP'], 'Only total degree (TD) and tensor product (TP) truncation is currently supported ! l_q and hyperbolic cross truncation are underway !'
+        assert trunc in ['TD', 'TP', 'LQ'], 'Only total degree (TD), tensor product (TP) and L_q truncation is currently supported ! Hyperbolic cross truncation is also underway !'
         
         if dim is None:
             dim = self._dim
         if order is None:
             order = self._degree
 
-        if trunc == 'TD':
+        def TD(dim, order):
             q_num = [int(misc.comb(dim+i-1, i)) for i in range(order+1)]
             mul_ind = np.array(np.zeros(dim, dtype = int), dtype = int)
             mul_ind = np.vstack([mul_ind, np.eye(dim, dtype = int)])
@@ -248,11 +248,18 @@ class PolyBasis(object):
                     ind_new += [a0.shape[0]]
                 ind = ind_new
                 I = np.copy(mul_ind[np.sum(q_num[:j+1]):,:])
+            return mul_ind
+
+        if trunc == 'TD':
+            return TD(dim, order)
         elif trunc == 'TP':
             x = np.arange(order+1)
-            mul_ind = np.array(list(itls.product(x, repeat = dim)))[:,::-1]
-
-        return mul_ind
+            return np.array(list(itls.product(x, repeat = dim)))[:,::-1]
+        elif trunc == 'LQ':
+            assert q<1 and q is not None, 'q must be less than 1 for L_q truncation.'
+            mi = TD(dim, order)
+            locs = np.where(np.sum(mi**q, axis = 1) <= order**q)
+            return mi[list(locs),:]
     
     def mi_terms_loc(self, d1, d2, ord):
         assert d1 < d2
