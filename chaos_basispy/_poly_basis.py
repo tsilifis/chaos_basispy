@@ -249,8 +249,8 @@ class PolyBasis(object):
                 ind = ind_new
                 I = np.copy(mul_ind[np.sum(q_num[:j+1]):,:])
         elif trunc == 'TP':
-            x = np.arange(dim+1)
-            mul_ind = np.array(list(itls.product(x,x)))[:,::-1]
+            x = np.arange(order+1)
+            mul_ind = np.array(list(itls.product(x, repeat = dim)))[:,::-1]
 
         return mul_ind
     
