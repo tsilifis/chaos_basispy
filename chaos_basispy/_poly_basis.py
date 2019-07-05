@@ -176,8 +176,9 @@ class PolyBasis(object):
     _dim = None
     _MI_terms = None
     _type = None
+    _trunc = None
 
-    def __init__(self, dim = 1, degree = 1, pol_type = 'H'):
+    def __init__(self, dim = 1, degree = 1, pol_type = 'H', trunc = 'TD', q = None):
         """
         Ininializes the object 
         """
@@ -186,10 +187,15 @@ class PolyBasis(object):
         assert dim > 0
         assert degree > 0
         assert pol_type in ['H', 'L', 'Lag'], 'Only Hermite, Legendre and Laguerre polynomials are currently supported ! Choose among ' + str(['H', 'L', 'Lag']) + ' !'
+        assert trunc in ['TD', 'TP', 'LQ'], 'Only total degree (TD), tensor product (TP) and L_q truncation is currently supported ! Hyperbolic cross truncation is also underway !'
+        
         self._degree = degree 
         self._dim = dim
-        self._MI_terms = self.mi_terms(self._dim, self._degree)
+        if trunc == 'LQ' and q is None:
+            q = 0.5
+        self._MI_terms = self.mi_terms(self._dim, self._degree, trunc, q)
         self._type = pol_type
+        self._trunc = trunc
 
 
     def __call__(self, XI):
