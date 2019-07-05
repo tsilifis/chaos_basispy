@@ -10,6 +10,7 @@ __all__ = ['PolyBasis', 'MonicPoly', 'Hermite1d', 'Legendre1d', 'Laguerre1d']
 import numpy as np
 import math
 from scipy import misc
+import itertools as itls
 
 
 class Hermite1d(object):
@@ -214,32 +215,43 @@ class PolyBasis(object):
         return PSI
 
 
-    def mi_terms(self, dim = None, order = None):
-        """ matrix of basis terms
+    def mi_terms(self, dim = None, order = None, trunc = 'TD'):
+        """ matrix of multi-indices corresponding to basis terms
         Input
         :order: PCE order
         :dim: PCE dimension
-            
+        :trunc: truncation type 
+            'TD' --> total degree (sum alpha_i <= order)
+            'TP' --> tensor product (max alpha_i <= order)
+            'LQ' --> l_q truncation (sum alpha_i^q <= order^q)
+            'HC' --> hyperbolic cross (prod [alpha_i+1] <= [order + 1])
         """
+        assert trunc in ['TD', 'TP'], 'Only total degree (TD) and tensor product (TP) truncation is currently supported ! l_q and hyperbolic cross truncation are underway !'
+        
         if dim is None:
             dim = self._dim
         if order is None:
             order = self._degree
 
-        q_num = [int(misc.comb(dim+i-1, i)) for i in range(order+1)]
-        mul_ind = np.array(np.zeros(dim, dtype = int), dtype = int)
-        mul_ind = np.vstack([mul_ind, np.eye(dim, dtype = int)])
-        I = np.eye(dim, dtype = int)
-        ind = [1] * dim
-        for j in range(1,order):
-            ind_new = []
-            for i in range(dim):
-                a0 = np.copy(I[int(np.sum(ind[:i])):,:])
-                a0[:,i] += 1
-                mul_ind = np.vstack([mul_ind, a0])
-                ind_new += [a0.shape[0]]
-            ind = ind_new
-            I = np.copy(mul_ind[np.sum(q_num[:j+1]):,:])
+        if trunc == 'TD':
+            q_num = [int(misc.comb(dim+i-1, i)) for i in range(order+1)]
+            mul_ind = np.array(np.zeros(dim, dtype = int), dtype = int)
+            mul_ind = np.vstack([mul_ind, np.eye(dim, dtype = int)])
+            I = np.eye(dim, dtype = int)
+            ind = [1] * dim
+            for j in range(1,order):
+                ind_new = []
+                for i in range(dim):
+                    a0 = np.copy(I[int(np.sum(ind[:i])):,:])
+                    a0[:,i] += 1
+                    mul_ind = np.vstack([mul_ind, a0])
+                    ind_new += [a0.shape[0]]
+                ind = ind_new
+                I = np.copy(mul_ind[np.sum(q_num[:j+1]):,:])
+        elif trunc == 'TP':
+            x = np.arange(dim+1)
+            mul_ind = np.array(list(itls.product(x,x)))[:,::-1]
+
         return mul_ind
     
     def mi_terms_loc(self, d1, d2, ord):

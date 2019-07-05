@@ -2,6 +2,7 @@ import chaos_basispy as cb
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 dim = 5
 [x, w] = cb.QuadratureRule().get_rule(dim, 6, False)
 xi = np.random.normal(size = (100000,5))
