@@ -265,7 +265,7 @@ class PolyBasis(object):
             assert q<1 and q is not None, 'q must be less than 1 for L_q truncation.'
             mi = TD(dim, order)
             locs = np.where(np.sum(mi**q, axis = 1) <= order**q)
-            return mi[list(locs),:]
+            return mi[list(locs),:][0,:,:]
     
     def mi_terms_loc(self, d1, d2, ord):
         assert d1 < d2
