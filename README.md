@@ -2,12 +2,12 @@
 A Polynomial Chaos Basis Reduction module
 =======================================
 
-Author:       Panagiotis Tsilifis
+**Author**:       Panagiotis Tsilifis
 
-Affiliation:  CSQI, Institure of Mathematics, 
+**Affiliation**:  CSQI, Institure of Mathematics, 
               École Polytechnique Fédérale de Lausanne, Lausanne, CH-1015, Switzerland
 
-email address: panagiotis.tsilifis@epfl.ch
+**email address**: panagiotis.tsilifis@epfl.ch
 
 Description
 -----------
