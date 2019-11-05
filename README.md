@@ -1,5 +1,5 @@
 # chaos_basispy
-A Polynomial Chaos Basis Reduction module
+A Polynomial Chaos Basis Reduction Python module
 =======================================
 
 **Author**:       Panagiotis Tsilifis
